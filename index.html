@@ -508,7 +508,7 @@ function renderToday(){
       ${isToday?`<div class="muted small">${fmtDate(viewDate)}</div>`:''}
     </div>
     <div class="daynav">
-      <button class="iconbtn" data-act="go" data-v="remind" aria-label="Напоминания"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></button>
+      <button class="iconbtn" data-act="go" data-v="remind" aria-label="Напоминания" style="background:var(--accent-soft);border-color:var(--accent);color:var(--accent)"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></button>
       <button class="iconbtn" data-act="day" data-v="-1" aria-label="Предыдущий день" ${viewDate<=minDate?'disabled':''}>${ICON.left}</button>
       ${isToday?'':'<button class="btn sm" data-act="day" data-v="0">Сегодня</button>'}
       <button class="iconbtn" data-act="day" data-v="1" aria-label="Следующий день" ${viewDate>=maxDate?'disabled':''}>${ICON.right}</button>
@@ -530,6 +530,12 @@ function renderToday(){
     ${isToday?`<div class="next">${nextT?`<span class="eyebrow">Дальше</span><b class="num">${nextT.time}</b><span>${esc(nextT.t)}</span>`:`<span class="eyebrow">На сегодня</span><span>${sc.pct>=80?'План выполнен. Отбой вовремя — и день засчитан.':'Все пункты позади. Отметь, что успел.'}</span>`}</div>`:''}
   </div>
 
+  ${isToday && !S.remindHide && Object.keys(S.remind||{}).length<REMINDERS.length ? `
+  <div class="card" style="border-color:var(--accent);background:var(--accent-soft)">
+    <div class="section-head"><h3>Настрой напоминания</h3><span class="small muted num">добавлено ${Object.keys(S.remind||{}).length} из ${REMINDERS.length}</span></div>
+    <p class="small">Телефон будет сам напоминать про подъём, еду, зал и отбой. Один раз, 5 минут.</p>
+    <div class="btnrow"><button class="btn primary" data-act="go" data-v="remind">Настроить напоминания</button><button class="more" data-act="remhide">Скрыть</button></div>
+  </div>` : ''}
   <div class="water">
     <div class="row"><h3>Вода</h3><span class="muted small num">${dd.w} × 250 мл = ${fmtNum(dd.w*0.25,2)} л · цель 2 л</span></div>
     <div class="cups" role="group" aria-label="Стаканы воды">
@@ -1333,7 +1339,8 @@ function renderRemind(){
     <h3>Настройка на Redmi · 5 минут</h3>
     <ol class="clean">
       <li>В Google Календаре: меню ☰ → Настройки → твой аккаунт → уведомления по умолчанию для мероприятий → «За 0 минут» (или «За 5 минут»). Сделай это до добавления.</li>
-      <li>Нажимай «Добавить» у каждого пункта ниже → откроется Google Календарь → «Сохранить». Повтор уже настроен.</li>
+      <li>Нажимай «Добавить в календарь» у каждого пункта ниже → откроется Google Календарь с готовым событием → «Сохранить».</li>
+      <li>Проверь строку «Повторять»: если календарь не поставил повтор сам — выбери «Каждую неделю» и отметь дни, которые написаны под названием напоминания.</li>
       <li>Чтобы MIUI не глушил уведомления: Настройки → Приложения → Календарь → Контроль активности (Экономия заряда) → «Нет ограничений». Там же проверь, что уведомления включены.</li>
       <li>Подъём и отбой надёжнее поставить будильником в приложении «Часы».</li>
       <li>Чтобы приложение было под рукой: в Chrome ⋮ → «Добавить на главный экран».</li>
@@ -1350,13 +1357,26 @@ function renderRemind(){
         <div class="small muted" style="margin-top:2px">${esc(r.d)}</div>
         <div class="acts">
           ${r.late?'<div class="small" style="color:var(--warn);width:100%">Добавь с 4-й недели. До этого — будильник в «Часах» по времени из распорядка.</div>':''}
-          <a class="btn sm primary" href="${gcalLink(r)}" target="_blank" rel="noopener" data-act="gcal" data-v="${r.id}">Добавить</a>
+          <a class="btn sm primary" href="${gcalLink(r)}" target="_blank" rel="noopener" data-act="gcal" data-v="${r.id}">Добавить в календарь</a>
           ${S.remind[r.id]?`<button class="btn sm" data-act="unrem" data-v="${r.id}">Отменить отметку</button><span class="added">✓ добавлено</span>`:''}
         </div>
       </div>
     </div>`).join('')}
   </div>
-  <p class="small muted">Если ссылка открылась в браузере, а не в приложении — войди в тот же Google-аккаунт, что на телефоне, и нажми «Сохранить». Событие появится в Календаре на телефоне.</p>`;
+  <p class="small muted">Если ссылка открылась в браузере, а не в приложении Календарь, — войди в тот же Google-аккаунт, что на телефоне, и нажми «Сохранить». Событие появится в Календаре на телефоне.</p>
+  <div class="card soft">
+    <h3>Если календарь не открывается</h3>
+    <p class="small">Поставь главные напоминания будильниками в приложении «Часы» → «+» → время → «Повтор» → дни → в «Название» впиши текст:</p>
+    <ul class="clean small">
+      <li><b>06:50</b> пн–пт — Подъём</li>
+      <li><b>10:00</b> пн–пт — Перекус в школе</li>
+      <li><b>16:00</b> пн, ср, пт — Перекус и сумка в зал</li>
+      <li><b>16:15</b> вт, чт — Перекус перед английским</li>
+      <li><b>20:15</b> пн–сб — Дикция 12 минут</li>
+      <li><b>21:15</b> каждый день — Второй ужин</li>
+      <li><b>21:45</b> каждый день — Уход, зубы, телефон на зарядку</li>
+    </ul>
+  </div>`;
 }
 
 /* ================= РЕЧЬ ================= */
@@ -1573,6 +1593,7 @@ document.addEventListener('click',e=>{
     let n=cur, guard=0; while((n===cur || (we && SCHOOL_CH.includes(n)) || (S.chSkip||[]).includes(n)) && guard<100){ n=Math.floor(Math.random()*CHALLENGES.length); guard++; }
     dd.ch=n; save(); const y=window.scrollY; renderToday(); window.scrollTo(0,y); toast('Новый челлендж на сегодня');
   }
+  else if(act==='remhide'){ S.remindHide=true; save(); renderToday(); toast('Напоминания — колокольчик вверху'); }
   else if(act==='water'){ const k=keyOf(viewDate); const dd=ensureDay(k); const n=+v; dd.w = (dd.w===n)? n-1 : n; save(); const y=window.scrollY; renderToday(); window.scrollTo(0,y); }
   else if(act==='back'){ viewDate=parseKey(todayKey()); show('today'); window.scrollTo(0,0); }
   else if(act==='day'){ const n=+v; viewDate = n===0? parseKey(todayKey()) : addDays(viewDate,n); renderToday(); }
