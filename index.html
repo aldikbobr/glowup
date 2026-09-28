@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2F52E0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Глоу Ап">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui;background:#F2F4F9}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Проект Глоу Ап</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#F2F4F9; --surface:#FFFFFF; --surface-2:#F7F8FC; --ink:#131A31; --muted:#5A6380; --line:#DCE1EC;
+  --grid:rgba(47,82,224,.08);
+  --accent:#2F52E0; --accent-ink:#FFFFFF; --accent-soft:#E4EAFF; --hot:#E8561F; --ok:#1E9A60; --warn:#B7791F;
+  --c-sleep:#6A5AE0; --c-food:#C27A00; --c-sport:#2F52E0; --c-care:#0B8C98; --c-style:#C2417A; --c-mind:#7B61C9; --c-prog:#1E9A60;
+  --shadow:0 1px 2px rgba(19,26,49,.05),0 6px 20px rgba(19,26,49,.06);
+  --font-d:'Unbounded','Arial Black',system-ui,sans-serif;
+  --font-b:'Onest',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1120; --surface:#141B2E; --surface-2:#10172A; --ink:#E7EBF7; --muted:#97A1BF; --line:#263050;
+    --grid:rgba(126,155,255,.07);
+    --accent:#7E9BFF; --accent-ink:#0C1120; --accent-soft:#1D2750; --hot:#FF855A; --ok:#3DCB8A; --warn:#E5B04A;
+    --c-sleep:#A396FF; --c-food:#F0B23A; --c-sport:#7E9BFF; --c-care:#3CCFD9; --c-style:#F07AAE; --c-mind:#B7A2FF; --c-prog:#3DCB8A;
+    --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1120; --surface:#141B2E; --surface-2:#10172A; --ink:#E7EBF7; --muted:#97A1BF; --line:#263050;
+  --grid:rgba(126,155,255,.07);
+  --accent:#7E9BFF; --accent-ink:#0C1120; --accent-soft:#1D2750; --hot:#FF855A; --ok:#3DCB8A; --warn:#E5B04A;
+  --c-sleep:#A396FF; --c-food:#F0B23A; --c-sport:#7E9BFF; --c-care:#3CCFD9; --c-style:#F07AAE; --c-mind:#B7A2FF; --c-prog:#3DCB8A;
+  --shadow:none; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 calc(92px + env(safe-area-inset-bottom,0px));-webkit-font-smoothing:antialiased}
+.wrap{max-width:580px;margin:0 auto;display:flex;flex-direction:column;gap:18px;padding-top:18px}
+.view{display:flex;flex-direction:column;gap:18px;min-width:0}
+h1,h2,h3{font-family:var(--font-d);font-weight:700;letter-spacing:-.01em;text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:22px}
+h2{font-size:18px}
+h3{font-size:15px}
+p{margin:0}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+
+/* top */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.top .eyebrow{margin-bottom:4px}
+.daynav{display:flex;align-items:center;gap:6px}
+.iconbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer}
+.iconbtn:disabled{opacity:.35;cursor:default}
+.iconbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* hero card – тетрадь в клетку */
+.hero{position:relative;border-radius:18px;background-color:var(--surface);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:18px 18px;border:1px solid var(--line);box-shadow:var(--shadow);padding:18px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.ring{width:108px;height:108px;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .track{stroke:var(--line);fill:none;stroke-width:9}
+.ring .bar{stroke:var(--accent);fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.ring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .pct{font-family:var(--font-d);font-size:24px;font-weight:700;line-height:1}
+.ring .sub{font-size:11px;color:var(--muted);margin-top:2px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.stat .v{font-family:var(--font-d);font-size:20px;font-weight:700;line-height:1.1;display:flex;align-items:center;gap:6px}
+.stat .k{font-size:12px;color:var(--muted)}
+.flame{width:18px;height:18px;fill:var(--hot)}
+.hero .next{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:12px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.hero .next b{font-family:var(--font-d);font-size:14px}
+
+/* water */
+.water{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.water .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cups{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.cup{aspect-ratio:3/4;max-width:100%;border-radius:6px 6px 9px 9px;border:1.5px solid var(--line);background:var(--surface-2);cursor:pointer;position:relative;overflow:hidden;padding:0}
+.cup::after{content:"";position:absolute;left:0;right:0;bottom:0;height:0;background:var(--c-care);opacity:.85;transition:height .25s}
+.cup.on{border-color:var(--c-care)}
+.cup.on::after{height:78%}
+.cup.bonus{border-style:dashed}
+
+/* tasks */
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tasks{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.task{display:grid;grid-template-columns:48px 1fr 40px;gap:10px;align-items:start;padding:12px 12px 12px 14px;border-top:1px solid var(--line)}
+.task:first-child{border-top:none}
+.task .time{font-family:var(--font-d);font-size:12px;font-weight:500;padding-top:3px;color:var(--muted)}
+.task .t{font-weight:600;line-height:1.3}
+.task .d{font-size:13px;color:var(--muted);margin-top:2px}
+.task .meta{display:flex;gap:10px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted)}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--muted));display:inline-block}
+.more{font-size:12px;font-weight:600;background:none;border:none;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.check{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;padding:0;justify-self:end}
+.check svg{width:18px;height:18px;stroke:var(--accent-ink);stroke-width:3;fill:none;opacity:0;stroke-linecap:round;stroke-linejoin:round}
+.task.done .check{background:var(--accent);border-color:var(--accent)}
+.task.done .check svg{opacity:1}
+.task.done .t{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+.task.now{background:var(--accent-soft)}
+.task.now .time{color:var(--accent)}
+.nowtag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent);border-radius:4px;padding:1px 6px}
+.check:disabled{cursor:default;opacity:.5}
+
+/* generic blocks */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px}
+.card.soft{background:var(--surface-2)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 16px;border-radius:11px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.wa{background:#1F9D55;border-color:#1F9D55;color:#fff}
+.btn.sm{min-height:34px;padding:0 12px;font-size:13px;border-radius:9px}
+.btn.danger{color:var(--hot);border-color:var(--hot)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+ul.clean li::marker{color:var(--accent)}
+ol.clean li::marker{color:var(--accent);font-family:var(--font-d);font-size:12px}
+.note{font-size:13px;border-left:3px solid var(--warn);padding:8px 12px;background:var(--surface-2);border-radius:0 8px 8px 0}
+.note.red{border-color:var(--hot)}
+.note.ok{border-color:var(--ok)}
+
+/* sub tabs */
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.prose{display:flex;flex-direction:column;gap:14px}
+.prose .lead{font-size:16px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 12px}
+.kv dt{font-weight:600}
+.kv dd{margin:0;color:var(--muted)}
+
+/* exercises */
+.ex{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.ex:first-of-type{border-top:none;padding-top:0}
+.ex .n{font-family:var(--font-d);font-size:13px;color:var(--accent);padding-top:2px}
+.ex .nm{font-weight:600}
+.ex .sets{font-family:var(--font-d);font-size:12px;color:var(--ink);background:var(--accent-soft);border-radius:6px;padding:2px 8px;display:inline-block;margin-top:4px}
+.ex .cue{font-size:13px;color:var(--muted);margin-top:6px}
+.ex label{font-size:12px;color:var(--muted);display:block;margin-top:8px}
+input[type=text],input[type=number],input[type=date],input[type=tel],textarea{font:inherit;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;width:100%;min-width:0}
+textarea{min-height:70px;resize:vertical;font-size:12px}
+
+/* food */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.tile .v{font-family:var(--font-d);font-size:19px;font-weight:700}
+.tile .k{font-size:12px;color:var(--muted)}
+.meal{display:grid;grid-template-columns:52px 1fr auto;gap:10px;padding:11px 0;border-top:1px solid var(--line);align-items:baseline}
+.meal:first-child{border-top:none;padding-top:0}
+.meal .time{font-family:var(--font-d);font-size:12px;color:var(--muted)}
+.meal .lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--c-food);font-weight:700}
+.meal .nm{font-weight:500}
+.meal .hint{font-size:12px;color:var(--muted)}
+.meal .kc{font-size:12px;color:var(--muted);text-align:right;white-space:nowrap}
+.totals{display:flex;gap:14px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:10px;font-weight:600}
+.shop{display:flex;flex-direction:column;gap:2px}
+.shop label{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}
+.shop input{margin-top:4px;accent-color:var(--accent);width:18px;height:18px;flex:0 0 auto}
+.shop .q{color:var(--muted);font-size:13px}
+.shop label.got span{text-decoration:line-through;color:var(--muted)}
+
+/* progress */
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font-size:10px;font-family:var(--font-b)}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .ln{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.heat{display:grid;grid-template-columns:22px repeat(7,1fr);gap:4px;font-size:10px;color:var(--muted)}
+.heat .c{aspect-ratio:1;border-radius:4px;background:var(--line);max-width:100%}
+.heat .c.l1{background:var(--accent);opacity:.3}
+.heat .c.l2{background:var(--accent);opacity:.6}
+.heat .c.l3{background:var(--accent)}
+.heat .c.fut{background:transparent;border:1px dashed var(--line)}
+.heat .c.today{outline:2px solid var(--ink);outline-offset:1px}
+.mlist{display:flex;flex-direction:column}
+.mrow{display:grid;grid-template-columns:1fr auto;gap:8px;padding:9px 0;border-top:1px solid var(--line);align-items:center}
+.mrow:first-child{border-top:none}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form .full{grid-column:1/-1}
+.form label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+
+/* reminders */
+.rem{display:grid;grid-template-columns:54px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.rem:first-child{border-top:none;padding-top:0}
+.rem .time{font-family:var(--font-d);font-size:13px;font-weight:700;padding-top:1px}
+.rem .days{font-size:12px;color:var(--muted)}
+.rem .acts{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.rem .added{font-size:12px;color:var(--ok);font-weight:600}
+
+/* speech */
+.sp-now{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.sp-name{font-family:var(--font-d);font-size:17px;font-weight:700}
+.sp-count{font-family:var(--font-d);font-size:40px;font-weight:700;color:var(--accent);line-height:1}
+.sp-bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.sp-bar i{display:block;height:100%;background:var(--accent);transition:width .9s linear}
+.sp-tw{margin:0;font-family:var(--font-d);font-weight:500;font-size:17px;line-height:1.45;padding:14px 16px;border-radius:12px;background:var(--accent-soft);color:var(--ink)}
+.sp-text{font-size:16px;line-height:1.65;padding:12px 14px;border:1px dashed var(--line);border-radius:12px;background:var(--surface-2)}
+.sp-plus{min-height:56px;flex:1 1 auto}
+/* tabbar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+.tabbar .in{max-width:580px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.tabbar button{background:none;border:none;padding:9px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer}
+.tabbar svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button[aria-current="page"]{color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:10px;font-size:13px;font-weight:600;z-index:20;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:380px){.hero{grid-template-columns:1fr;justify-items:center}.stats{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="storeWarn" class="note red" hidden>Этот браузер не сохраняет данные (например, режим инкогнито). Отметки пропадут после закрытия — открой ссылку в обычном Chrome.</div>
+
+  <section id="tab-today" class="view"></section>
+  <section id="tab-plan" class="view" hidden></section>
+  <section id="tab-food" class="view" hidden></section>
+  <section id="tab-progress" class="view" hidden></section>
+  <section id="tab-speech" class="view" hidden></section>
+  <section id="tab-remind" class="view" hidden></section>
+</div>
+
+<nav class="tabbar" aria-label="Разделы">
+  <div class="in">
+    <button data-tab="today" aria-current="page"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>Сегодня</button>
+    <button data-tab="plan"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>План</button>
+    <button data-tab="speech"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Дикция</button>
+    <button data-tab="food"><svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg>Еда</button>
+    <button data-tab="progress"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M7 15l4-4 3 3 5-6"/></svg>Прогресс</button>
+
+  </div>
+</nav>
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= ДАННЫЕ ================= */
+const MENU = {"Пн": {"meals": [{"name": "Овсянка на молоке с бананом, 2 яйца, чай с мёдом", "hint": "60 г овсянки ≈ 6 ст. л.", "kcal": 630, "p": 30}, {"name": "Бутерброды с сыром + яблоко", "hint": "2 куска хлеба", "kcal": 350, "p": 13}, {"name": "Плов с говядиной + салат из огурцов и помидоров", "hint": "полная тарелка плова", "kcal": 720, "p": 24}, {"name": "Кефир + банан + тост с арахисовой пастой", "hint": "за 30 минут до зала", "kcal": 410, "p": 15}, {"name": "Куриное бедро запечённое, гречка, овощи", "hint": "мясо — размером с ладонь", "kcal": 540, "p": 39}, {"name": "Творог с мёдом и орехами", "hint": "полпачки творога", "kcal": 240, "p": 20}], "kcal": 2900, "p": 141, "f": 112, "c": 333}, "Вт": {"meals": [{"name": "Омлет из 2 яиц, 2 тоста с сыром, помидор, банан", "hint": "", "kcal": 530, "p": 28}, {"name": "Питьевой йогурт + банан", "hint": "бутылочка 250 мл", "kcal": 290, "p": 9}, {"name": "Куриный суп + макароны с говяжьей котлетой + овощи", "hint": "тарелка супа", "kcal": 760, "p": 41}, {"name": "Домашний гейнер (рецепт ниже)", "hint": "большой стакан", "kcal": 450, "p": 17}, {"name": "Горбуша запечённая, картофельное пюре, овощи, хлеб", "hint": "", "kcal": 550, "p": 36}, {"name": "Кефир + тост с арахисовой пастой", "hint": "", "kcal": 300, "p": 14}], "kcal": 2900, "p": 144, "f": 100, "c": 360}, "Ср": {"meals": [{"name": "Сырники со сметаной и мёдом, банан, чай", "hint": "3 сырника — пожарить с вечера, утром разогреть", "kcal": 520, "p": 25}, {"name": "Ролл в лаваше: курица и овощи + яблоко", "hint": "", "kcal": 350, "p": 22}, {"name": "Лагман с говядиной + хлеб", "hint": "глубокая тарелка", "kcal": 640, "p": 32}, {"name": "Йогурт + банан + тост с арахисовой пастой", "hint": "за 30 минут до зала", "kcal": 460, "p": 16}, {"name": "Тушёная говядина, рис, салат", "hint": "", "kcal": 730, "p": 37}, {"name": "Творог с сухофруктами", "hint": "курага, изюм", "kcal": 220, "p": 18}], "kcal": 2950, "p": 150, "f": 88, "c": 391}, "Чт": {"meals": [{"name": "Рисовая каша на молоке с маслом, 2 яйца", "hint": "кашу сварить с вечера, утром разогреть", "kcal": 570, "p": 25}, {"name": "Бутерброды с сыром + банан", "hint": "", "kcal": 360, "p": 14}, {"name": "Суп + куриная котлета с гречкой + овощи", "hint": "", "kcal": 620, "p": 38}, {"name": "Домашний гейнер", "hint": "", "kcal": 450, "p": 17}, {"name": "Манты (5 шт.) со сметаной + салат", "hint": "", "kcal": 670, "p": 32}, {"name": "Айран + яблоко", "hint": "", "kcal": 190, "p": 6}], "kcal": 2850, "p": 131, "f": 114, "c": 335}, "Пт": {"meals": [{"name": "Овсянка на молоке с арахисовой пастой и бананом, 2 яйца", "hint": "", "kcal": 700, "p": 34}, {"name": "Ролл в лаваше с тунцом и овощами + яблоко", "hint": "тунец в собственном соку", "kcal": 320, "p": 19}, {"name": "Суп + плов + салат", "hint": "", "kcal": 660, "p": 29}, {"name": "Кефир + банан + тост с арахисовой пастой", "hint": "за 30 минут до зала", "kcal": 410, "p": 15}, {"name": "Куриное бедро, макароны с сыром, овощи", "hint": "", "kcal": 760, "p": 46}, {"name": "Творог с мёдом и орехами", "hint": "", "kcal": 240, "p": 20}], "kcal": 3100, "p": 164, "f": 106, "c": 380}, "Сб": {"meals": [{"name": "Омлет из 2 яиц с сыром, хлеб, помидор, банан", "hint": "", "kcal": 530, "p": 28}, {"name": "Питьевой йогурт, банан и горсть орехов", "hint": "после английского", "kcal": 450, "p": 13}, {"name": "Бешбармак", "hint": "большая тарелка", "kcal": 660, "p": 42}, {"name": "Домашний гейнер", "hint": "", "kcal": 450, "p": 17}, {"name": "Домашняя шаурма: лаваш, курица, овощи, йогуртовый соус", "hint": "", "kcal": 480, "p": 36}, {"name": "Кефир + овсяное печенье", "hint": "2 печенья", "kcal": 260, "p": 9}], "kcal": 2850, "p": 144, "f": 115, "c": 314}, "Вс": {"meals": [{"name": "Сырники со сметаной и мёдом, банан", "hint": "3 сырника + тост", "kcal": 590, "p": 27}, {"name": "Бутерброд с сыром + яблоко", "hint": "", "kcal": 350, "p": 13}, {"name": "Суп + тушёная говядина с отварной картошкой + салат", "hint": "", "kcal": 730, "p": 44}, {"name": "Домашний гейнер", "hint": "", "kcal": 450, "p": 17}, {"name": "Скумбрия запечённая, рис, овощи", "hint": "", "kcal": 640, "p": 34}, {"name": "Творог с мёдом и бананом", "hint": "", "kcal": 200, "p": 18}], "kcal": 2950, "p": 154, "f": 102, "c": 366}};
+const DOW_KEYS = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const DOW_FULL = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const MEAL_LABELS = ['Завтрак','Перекус','Обед','Перекус','Ужин','Второй ужин'];
+/* уроки: пн и пт до 13:15, вт–чт до 14:05, дорога 20 минут; зал пн/ср/пт с 16:30; английский вт/чт 17:00 и сб 9:00 */
+const MEAL_TIMES = {
+  1:['07:00','10:00','13:45','16:00','18:45','21:15'],
+  2:['07:00','10:00','14:30','16:15','18:30','21:15'],
+  3:['07:00','10:00','14:30','16:00','18:45','21:15'],
+  4:['07:00','10:00','14:30','16:15','18:30','21:15'],
+  5:['07:00','10:00','13:45','16:00','18:45','21:15'],
+  6:['08:10','10:45','14:00','17:00','19:00','21:15'],
+  0:['08:45','11:30','14:00','17:00','19:00','21:00']
+};
+const SPLIT = {1:'грудь + трицепс',3:'спина + бицепс',5:'плечи + ноги'};
+const BED_STEPS = ['23:30','23:00','22:30','22:15'];
+const PROGRAM_DAYS = 180;
+const CATS = {
+  sleep:{n:'Сон',c:'var(--c-sleep)'}, food:{n:'Еда',c:'var(--c-food)'}, sport:{n:'Спорт',c:'var(--c-sport)'},
+  care:{n:'Уход',c:'var(--c-care)'}, style:{n:'Стиль',c:'var(--c-style)'}, mind:{n:'Уверенность',c:'var(--c-mind)'}, prog:{n:'Прогресс',c:'var(--c-prog)'}, study:{n:'Учёба',c:'var(--muted)'}
+};
+const CHALLENGES = [
+  'Поздороваться первым с тремя людьми',
+  'Задать вопрос учителю на уроке',
+  'Сделать искренний комплимент другу',
+  'Весь день держать осанку — проверяй себя каждый час',
+  'Вызваться ответить у доски',
+  'Спросить совет у продавца или тренера',
+  'Поесть без телефона — все приёмы пищи сегодня',
+  'Записать 3 вещи, которые получились на этой неделе',
+  'Позвонить родственнику и просто поговорить',
+  'Попросить в зале показать технику нового упражнения',
+  'Весь день говорить медленнее и чётче',
+  'Помочь дома, когда никто не просил',
+  'Посмотреть в зеркало и назвать 3 вещи, которые в себе нравятся',
+  'Заговорить с человеком, с которым раньше не общался',
+  'Спокойно высказать своё мнение, даже если оно отличается',
+  'Прожить день без жалоб',
+  'Прочитать 20 страниц книги',
+  'Разобраться в теме, которую не понимал, и объяснить другу',
+  'Поблагодарить учителя или тренера',
+  'Сказать «нет», когда не хочется, спокойно и без оправданий',
+  'Сходить одному в новое место и держаться спокойно',
+  'Посмотреть разбор техники приседа и проверить себя',
+  'Записать себе голосовое: моя цель на полгода за 1 минуту',
+  'Убраться в комнате за 15 минут',
+  'Отписаться от 5 аккаунтов, после которых чувствуешь себя хуже',
+  'Самому позвать друзей на игру или прогулку',
+  'Выучить 10 новых английских слов',
+  'Пройти 10 000 шагов',
+  'Написать 3 цели на следующий месяц',
+  'Сравнить фото с первым днём и записать, что изменилось'
+];
+
+const GYM_DEFAULT = {
+  1:['Жим штанги лёжа','Жим гантелей на наклонной скамье','Сведение рук в тренажёре (бабочка)','Отжимания на брусьях','Разгибания рук на блоке','Французский жим'],
+  3:['Подтягивания или тяга верхнего блока','Тяга штанги в наклоне','Горизонтальная тяга блока','Тяга гантели одной рукой','Подъём штанги на бицепс','Молотки с гантелями'],
+  5:['Приседания или жим ногами','Выпады с гантелями','Разгибания ног в тренажёре','Сгибания ног в тренажёре','Жим гантелей сидя','Махи гантелями в стороны']
+};
+
+const REMINDERS = [
+  {id:'r1',t:'Подъём',time:'06:50',dur:10,days:['MO','TU','WE','TH','FR'],d:'Не откладывать будильник. Стакан воды.',alarm:true},
+  {id:'r2',t:'Умыться и завтрак',time:'06:55',dur:25,days:['MO','TU','WE','TH','FR'],d:'Пенка → тонер → крем → SPF. Завтрак в 07:00, в 07:30 перекус и вода в рюкзак, в 07:35 выход.'},
+  {id:'r3',t:'Перекус в школе',time:'10:00',dur:10,days:['MO','TU','WE','TH','FR'],d:'Бутерброды, йогурт, банан — не пропускать.'},
+  {id:'r6',t:'Осанка и пресс',time:'15:30',dur:20,days:['TU','TH'],d:'12 минут осанка + 8 минут пресс. Упражнения — в приложении, «План» → «Осанка».'},
+  {id:'r4',t:'Перекус и сумка в зал',time:'16:00',dur:15,days:['MO','WE','FR'],d:'Кефир + банан + тост с арахисовой пастой. Форма, вода, полотенце.'},
+  {id:'r13',t:'Перекус перед английским',time:'16:15',dur:10,days:['TU','TH'],d:'Гейнер или кефир с бананом.'},
+  {id:'r5',t:'Зал',time:'16:30',dur:90,days:['MO','WE','FR'],d:'Разминка до прихода тренера. Запиши веса в приложении.'},
+  {id:'r14',t:'Осанка и пресс',time:'17:30',dur:20,days:['SA'],d:'12 минут осанка + 8 минут пресс.'},
+  {id:'r15',t:'Дикция и речь',time:'20:15',dur:12,days:['MO','TU','WE','TH','FR','SA'],d:'Разминка → звук дня → 2 скороговорки → минута без паразитов. Вкладка «Дикция».'},
+  {id:'r7',t:'Второй ужин',time:'21:15',dur:10,days:'DAILY',d:'Творог или кефир — белок на ночь.'},
+  {id:'r8',t:'Уход, зубы, телефон на зарядку',time:'21:45',dur:15,days:'DAILY',d:'Ногти: не грыз? Пенка → крем. Зубы Clinica 2 минуты + нить. Телефон не у кровати.',late:true},
+  {id:'r9',t:'Отбой',time:'22:15',dur:10,days:'DAILY',d:'Цель — 8,5 часов сна. В пятницу и субботу можно до 22:45.',alarm:true,late:true},
+  {id:'r10',t:'Замеры и фото',time:'08:35',dur:10,days:['SU'],d:'Вес натощак, рост у стены, фото в одном месте и свете.'},
+  {id:'r11',t:'Недельный отчёт',time:'20:30',dur:10,days:['SU'],d:'Приложение → «Прогресс» → «Отчёт за неделю».'},
+  {id:'r12',t:'Стрижка у барбера',time:'11:15',dur:60,days:['SA'],interval:4,d:'После английского, раз в 4 недели. Фото стрижки с собой.'}
+];
+const DAYCODE = {SU:0,MO:1,TU:2,WE:3,TH:4,FR:5,SA:6};
+const DAYNAME_SHORT = {MO:'пн',TU:'вт',WE:'ср',TH:'чт',FR:'пт',SA:'сб',SU:'вс'};
+
+const SHOP = [
+  ['Молочное',[['Молоко 2,5–3,2%','2 л'],['Кефир','1,5 л'],['Питьевой йогурт','4 бутылочки по 250 мл'],['Айран','0,5 л'],['Творог 5%','4 пачки (2 — на сырники)'],['Сыр твёрдый','200 г'],['Сметана','1 небольшая банка']]],
+  ['Мясо, рыба, яйца',[['Яйца','10–12 шт.'],['Курица, бедро без кожи','500 г'],['Говядина','400 г (тушить и на котлеты)'],['Горбуша','1 стейк'],['Скумбрия','1 рыба'],['Тунец в собственном соку','1 банка']]],
+  ['Крупы и хлеб',[['Овсянка','1 пачка на 2–3 недели'],['Гречка','300 г'],['Рис','300 г'],['Макароны твёрдых сортов','300 г'],['Цельнозерновой хлеб','1 буханка'],['Лаваш','1 упаковка'],['Картофель','1 кг']]],
+  ['Фрукты и овощи',[['Бананы','16 шт.'],['Яблоки','5 шт.'],['Огурцы, помидоры, морковь, капуста','≈2 кг']]],
+  ['Уход — докупить один раз',[['Лёгкий крем non-comedogenic','например, SKIN1004 Centella Soothing Cream'],['Крем SPF 30–50','например, SKIN1004 Hyalu-Cica Sun Serum'],['Шампунь с кетоконазолом 2% (Низорал)','для спины и груди, в аптеке'],['Горький лак от обгрызания ногтей','в аптеке'],['Масло для кутикулы','любое'],['Бепантен или другой крем с декспантенолом','для ранок у ногтей'],['Хлоргексидин и маникюрные кусачки','для заусенцев'],['Спрей для волос с морской солью','для объёма'],['Матовая глина для волос','маленькая банка на 2–3 месяца'],['Зубная нить','']]],
+  ['Другое',[['Арахисовая паста без сахара','1 банка на месяц'],['Мёд','≈100 г'],['Орехи','100 г'],['Сухофрукты','100 г'],['Овсяное печенье','1 пачка']]]
+];
+
+/* ================= ХРАНИЛИЩЕ ================= */
+const KEY = 'glowup.v1';
+let storageOK = true;
+function todayKey(){ return keyOf(new Date()); }
+function keyOf(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function parseKey(k){ const [y,m,d]=k.split('-').map(Number); return new Date(y,m-1,d); }
+function addDays(d,n){ const x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+n); return x; }
+function diffDays(a,b){ return Math.round((parseKey(keyOf(b))-parseKey(keyOf(a)))/86400000); }
+
+const DEFAULT = {name:'',start:todayKey(),phone:'',days:{},measures:[],logs:{},shop:{},remind:{},dad:'',mom:'',ui:{tab:'today',plan:'grow',menu:null}};
+let S;
+function load(){
+  let raw=null;
+  try{ raw = localStorage.getItem(KEY); }catch(e){ storageOK=false; }
+  try{ S = raw ? Object.assign({}, DEFAULT, JSON.parse(raw)) : JSON.parse(JSON.stringify(DEFAULT)); }catch(e){ S = JSON.parse(JSON.stringify(DEFAULT)); }
+  S.ui = Object.assign({}, DEFAULT.ui, S.ui||{});
+  if(!S.name) S.name='Алдик';
+  if(!S.dad) S.dad='182';
+  if(!S.mom) S.mom='166';
+  if(!S.gym) S.gym={};
+  if(!S.speech) S.speech={tw:{},wpm:[],par:[]};
+  if(!raw) save();
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOK=false; document.getElementById('storeWarn').hidden=false; } }
+
+/* ================= УТИЛИТЫ ================= */
+const $ = (s,r=document)=>r.querySelector(s);
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,2200); }
+function fmtDate(d){ return d.getDate()+' '+MONTHS[d.getMonth()]; }
+function nowMin(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
+function fmtNum(n,dig=1){ return (Math.round(n*Math.pow(10,dig))/Math.pow(10,dig)).toString().replace('.',','); }
+function dayData(k){ return S.days[k] || {d:{},w:0}; }
+function ensureDay(k){ if(!S.days[k]) S.days[k]={d:{},w:0}; return S.days[k]; }
+const ICON = {
+  flame:'<svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 3.5-1.5 5-1.5 7.5 0 1.3.9 2.2 2 2.2 1.4 0 2.2-1.2 2-3 2.6 1.9 4.5 4.7 4.5 7.6A7 7 0 0 1 12 23a7 7 0 0 1-7-6.7c0-4.3 3.6-6.6 5-10.3.5 1 .7 2 .6 3.1C12.7 7.8 13 4.7 12 2z"/></svg>',
+  left:'<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>',
+  right:'<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+};
+
+/* ================= ЛОГИКА ДНЯ ================= */
+function fmtMin(m){ m=((m%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
+function weekNo(date){ return Math.floor(diffDays(parseKey(S.start),date)/7); }
+function bedtimeFor(date){
+  const w=Math.max(0,weekNo(date)); let b=toMin(BED_STEPS[Math.min(w,BED_STEPS.length-1)]);
+  const dow=date.getDay(); if(dow===5||dow===6) b+=30; /* завтра не в школу */
+  return b;
+}
+const SCHOOL_CH = [1,4]; /* только для учебных дней */
+function challengeIdx(date){
+  const dd=dayData(keyOf(date));
+  if(dd.ch!=null && CHALLENGES[dd.ch]) return dd.ch;
+  let i=((diffDays(parseKey(S.start),date)%CHALLENGES.length)+CHALLENGES.length)%CHALLENGES.length;
+  const we=date.getDay()===0||date.getDay()===6;
+  while(we && SCHOOL_CH.includes(i)) i=(i+1)%CHALLENGES.length;
+  return i;
+}
+function challengeFor(date){ return CHALLENGES[challengeIdx(date)]; }
+function tasksFor(date){
+  const dow = date.getDay(), menu = MENU[DOW_KEYS[dow]].meals, mt = MEAL_TIMES[dow];
+  const gym = dow===1||dow===3||dow===5;
+  const T=[]; const add=(id,time,cat,t,d,link)=>T.push({id,time,cat,t,d,link});
+  const ch = challengeFor(date);
+  const bed = bedtimeFor(date), w = weekNo(date);
+  const sleepNote = w<3 ? 'Переход к режиму: неделя '+(w+1)+' из 3. Каждую неделю — на 30 минут раньше' : 'Цель — 8,5 часов сна';
+  const evening = (pillow)=>{
+    add('supper',mt[5],'food','Второй ужин',menu[5].name,'food');
+    add('nails',fmtMin(bed-35),'care','Ногти: сегодня не грыз','Отметь, если весь день не грыз. Масло на кутикулу','hygiene');
+    add('pm_skin',fmtMin(bed-30),'care','Вечерний уход и зубы','Пенка Centella → крем. Зубы пастой Clinica 2 минуты + нить, не полоскать'+(pillow?'. Сменить наволочку':''),'skin');
+    add('phone',fmtMin(bed-20),'sleep','Телефон на зарядку не у кровати','Будильник поставить заранее');
+    add('sleep',fmtMin(bed),'sleep','Отбой',sleepNote);
+  };
+  if(dow>=1 && dow<=5){
+    add('wake','06:50','sleep','Подъём и стакан воды','Не откладывать будильник, сразу открыть шторы');
+    add('am_skin','06:55','care','Умыться и уход за кожей','Пенка Centella → тонер (первые 2 недели через день) → крем → SPF','skin');
+    add('breakfast',mt[0],'food','Завтрак',menu[0].name+' — 20 минут, не на бегу','food');
+    add('look','07:20','style','Волосы, антиперспирант, чистая одежда','Спрей с солью, фен, немного глины','hair');
+    add('bag','07:30','food','Перекус и вода в рюкзак',menu[1].name+' + бутылка воды 0,5 л. В 07:35 выход','food');
+    add('snack1',mt[1],'food','Перекус в школе',menu[1].name,'food');
+    add('lunch',mt[2],'food','Обед сразу после школы',menu[2].name,'food');
+    if(gym){
+      add('snack2',mt[3],'food','Перекус перед залом',menu[3].name,'food');
+      add('gym','16:30','sport','Зал: '+SPLIT[dow],'Разминка до тренера, с тренером в 17:00. Запиши веса','gym');
+      add('shower','18:15','care','Душ сразу после зала','Низорал на спину и грудь на 5 минут, смыть. Футболку — в стирку','skin');
+      add('dinner',mt[4],'food','Ужин',menu[4].name,'food');
+    } else {
+      add('core','15:30','sport','Осанка + пресс, 20 минут','12 минут осанка, 8 минут пресс','posture');
+      add('snack2',mt[3],'food','Перекус перед английским',menu[3].name,'food');
+      add('english','16:40','study','Английский','Занятие в 17:00, дома около 18:00');
+      add('dinner',mt[4],'food','Ужин',menu[4].name,'food');
+      add('shower','19:30','care','Душ','');
+    }
+    add('challenge','20:00','mind','Челлендж дня',ch,'mind');
+    add('speech','20:15','mind','Дикция и речь: 12 минут','Разминка → звук дня → 2 скороговорки → минута без паразитов','speech');
+    evening(dow===3);
+  } else if(dow===6){
+    add('wake','08:00','sleep','Подъём','Английский в 9:00 — завтрак быстрый');
+    add('am_skin','08:05','care','Умыться и уход за кожей','Пенка Centella → тонер → крем → SPF','skin');
+    add('breakfast',mt[0],'food','Завтрак',menu[0].name,'food');
+    add('english','08:40','study','Английский','Занятие в 9:00, дома около 10:20');
+    add('snack1',mt[1],'food','Перекус',menu[1].name,'food');
+    if(((w%4)+4)%4===0) add('haircut','11:15','style','Стрижка у барбера','Раз в 4 недели. Покажи 2–3 фото стрижки','hair');
+    add('active','12:00','sport','Спорт с друзьями или прогулка','Футбол, баскетбол, бассейн — 60 минут, без изнурения');
+    add('lunch',mt[2],'food','Обед',menu[2].name,'food');
+    add('snack2',mt[3],'food','Перекус',menu[3].name,'food');
+    add('core','17:30','sport','Осанка + пресс, 20 минут','12 минут осанка, 8 минут пресс','posture');
+    add('shower','18:30','care','Душ','');
+    add('dinner',mt[4],'food','Ужин',menu[4].name,'food');
+    add('challenge','20:00','mind','Челлендж дня',ch,'mind');
+    add('speech','20:15','mind','Дикция и речь: 12 минут','Разминка → звук дня → 2 скороговорки → минута без паразитов','speech');
+    evening(false);
+  } else {
+    add('wake','08:30','sleep','Подъём','Не позже 9:00, иначе вечером не уснёшь');
+    add('measure','08:35','prog','Замеры: вес, рост, фото','Натощак, после туалета. Фото — в одном месте и свете','progress');
+    add('am_skin','08:40','care','Умыться и уход за кожей','Пенка Centella → тонер → крем → SPF','skin');
+    add('breakfast',mt[0],'food','Завтрак',menu[0].name,'food');
+    add('snack1',mt[1],'food','Перекус',menu[1].name,'food');
+    add('walk','12:00','sport','Прогулка 40+ минут','Отдых от зала — мышцы растут, пока отдыхаешь');
+    add('lunch',mt[2],'food','Обед',menu[2].name,'food');
+    add('snack2',mt[3],'food','Перекус',menu[3].name,'food');
+    add('prep','18:00','style','Подготовка к неделе','Подстричь и подпилить ногти, горький лак. Одежда на 5 дней, форма в зал, кроссовки, наволочка и простыня','style');
+    add('dinner',mt[4],'food','Ужин',menu[4].name,'food');
+    add('challenge','20:00','mind','Челлендж дня',ch,'mind');
+    add('report','20:30','prog','Отправить недельный отчёт','Вкладка «Прогресс» → «Отчёт за неделю»','progress');
+    evening(false);
+  }
+  return T;
+}
+function scoreFor(date){
+  const k=keyOf(date), dd=dayData(k), T=tasksFor(date);
+  let done=T.filter(t=>dd.d[t.id]).length + (dd.w>=8?1:0);
+  const total=T.length+1;
+  return {done,total,pct:Math.round(done/total*100)};
+}
+function streak(){
+  const start=parseKey(S.start); let d=new Date(); d=parseKey(keyOf(d)); let n=0;
+  if(scoreFor(d).pct>=80) n++;
+  d=addDays(d,-1);
+  while(d>=start && scoreFor(d).pct>=80){ n++; d=addDays(d,-1); }
+  return n;
+}
+
+/* ================= СЕГОДНЯ ================= */
+let viewDate = parseKey(todayKey());
+function renderToday(){
+  const el=$('#tab-today');
+  const today=parseKey(todayKey());
+  const isToday = keyOf(viewDate)===keyOf(today);
+  const isFuture = viewDate>today;
+  const T=tasksFor(viewDate), k=keyOf(viewDate), dd=dayData(k), sc=scoreFor(viewDate);
+  const dayN = diffDays(parseKey(S.start),viewDate)+1;
+  const st = streak();
+  const C = 2*Math.PI*44, off = C*(1-sc.pct/100);
+  let nextIdx=-1;
+  if(isToday){ const nm=nowMin(); nextIdx=T.findIndex(t=>!dd.d[t.id] && toMin(t.time)+45>=nm); }
+  const nextT = nextIdx>=0?T[nextIdx]:null;
+  const hello = S.name ? 'Привет, '+esc(S.name) : 'Проект Глоу Ап';
+  const minDate = addDays(today,-13), maxDate=addDays(today,6);
+  el.innerHTML = `
+  <div class="top">
+    <div>
+      <div class="eyebrow">${isToday?'Сегодня':(isFuture?'План на день':'Прошедший день')} · ${DOW_FULL[viewDate.getDay()]}</div>
+      <h1>${isToday?hello:fmtDate(viewDate)}</h1>
+      ${isToday?`<div class="muted small">${fmtDate(viewDate)}</div>`:''}
+    </div>
+    <div class="daynav">
+      <button class="iconbtn" data-act="go" data-v="remind" aria-label="Напоминания"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></button>
+      <button class="iconbtn" data-act="day" data-v="-1" aria-label="Предыдущий день" ${viewDate<=minDate?'disabled':''}>${ICON.left}</button>
+      ${isToday?'':'<button class="btn sm" data-act="day" data-v="0">Сегодня</button>'}
+      <button class="iconbtn" data-act="day" data-v="1" aria-label="Следующий день" ${viewDate>=maxDate?'disabled':''}>${ICON.right}</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="ring" role="img" aria-label="Выполнено ${sc.pct}%">
+      <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="44"/><circle class="bar" cx="50" cy="50" r="44" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>
+      <div class="lbl"><div><div class="pct num">${sc.pct}%</div><div class="sub num">${sc.done} из ${sc.total}</div></div></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v num">${ICON.flame}${st}</div><div class="k">серия дней ≥ 80%</div></div>
+      <div class="stat"><div class="v num">${dayN>0?dayN:'—'}</div><div class="k">день из ${PROGRAM_DAYS}</div></div>
+      <div class="stat"><div class="v num">${dd.w}/8</div><div class="k">стаканов воды</div></div>
+      <div class="stat"><div class="v">${[1,3,5].includes(viewDate.getDay())?'Зал':([2,4,6].includes(viewDate.getDay())?'Англ.':'Отдых')}</div><div class="k">${[1,3,5].includes(viewDate.getDay())?SPLIT[viewDate.getDay()]:([2,4,6].includes(viewDate.getDay())?'осанка + пресс':'от зала')}</div></div>
+    </div>
+    <div class="next"><span class="eyebrow">Челлендж</span><span>${esc(challengeFor(viewDate))}</span></div>
+    ${isToday?`<div class="next">${nextT?`<span class="eyebrow">Дальше</span><b class="num">${nextT.time}</b><span>${esc(nextT.t)}</span>`:`<span class="eyebrow">На сегодня</span><span>${sc.pct>=80?'План выполнен. Отбой вовремя — и день засчитан.':'Все пункты позади. Отметь, что успел.'}</span>`}</div>`:''}
+  </div>
+
+  <div class="water">
+    <div class="row"><h3>Вода</h3><span class="muted small num">${dd.w} × 250 мл = ${fmtNum(dd.w*0.25,2)} л · цель 2 л</span></div>
+    <div class="cups" role="group" aria-label="Стаканы воды">
+      ${Array.from({length:10},(_,i)=>`<button class="cup ${i<dd.w?'on':''} ${i>=8?'bonus':''}" data-act="water" data-v="${i+1}" aria-label="${i+1} стакан" ${isFuture?'disabled':''}></button>`).join('')}
+    </div>
+  </div>
+
+  <div class="section-head"><h2>Распорядок</h2><span class="muted small">${isFuture?'отмечать можно в этот день':'нажми на круг — готово'}</span></div>
+  <div class="tasks">
+    ${T.map((t,i)=>`
+    <div class="task ${dd.d[t.id]?'done':''} ${i===nextIdx?'now':''}">
+      <div class="time num">${t.time}</div>
+      <div>
+        <div class="t">${esc(t.t)}</div>
+        ${t.d?`<div class="d">${esc(t.d)}</div>`:''}
+        <div class="meta">
+          <span class="chip" style="--dot:${CATS[t.cat].c}"><i></i>${CATS[t.cat].n}</span>
+          ${i===nextIdx?'<span class="nowtag">дальше</span>':''}
+          ${t.link?`<button class="more" data-act="go" data-v="${t.link}">${linkLabel(t.link)}</button>`:''}
+          ${t.id==='challenge'&&!isFuture&&!dd.d.challenge?'<button class="more" data-act="chswap">Другой</button>':''}
+        </div>
+      </div>
+      <button class="check" data-act="toggle" data-v="${t.id}" aria-pressed="${!!dd.d[t.id]}" aria-label="Отметить: ${esc(t.t)}" ${isFuture?'disabled':''}>${ICON.check}</button>
+    </div>`).join('')}
+  </div>
+
+  <div class="card soft">
+    <h3>Отчёт за ${isToday?'сегодня':'этот день'}</h3>
+    <p class="small muted">Отправь итог дня в WhatsApp тому, кто ведёт с тобой проект. Можно и вечером, после отбоя в приложении.</p>
+    <div class="btnrow">
+      <a class="btn wa" href="#" target="_blank" rel="noopener" data-act="wa" data-v="day">Отправить в WhatsApp</a>
+      <button class="btn" data-act="copy" data-v="day">Скопировать текст</button>
+    </div>
+  </div>`;
+}
+function linkLabel(l){ return ({speech:'Открыть тренажёр',hygiene:'Как бросить',food:'Меню',skin:'Как ухаживать',hair:'Укладка',gym:'Открыть тренировку',posture:'Упражнения',mind:'Зачем это',progress:'Открыть',style:'Капсула'})[l]||'Подробнее'; }
+
+/* ================= ОТЧЁТЫ ================= */
+function lastMeasure(){ const m=[...S.measures].sort((a,b)=>a.date<b.date?-1:1); return {last:m[m.length-1],first:m[0],prev:m[m.length-2]}; }
+function dayReport(date){
+  const T=tasksFor(date), dd=dayData(keyOf(date)), sc=scoreFor(date);
+  const g=T.find(t=>t.id==='gym'||t.id==='core'||t.id==='active'||t.id==='walk');
+  const food=T.filter(t=>t.cat==='food'); const fd=food.filter(t=>dd.d[t.id]).length;
+  const ch=T.find(t=>t.id==='challenge');
+  const {last}=lastMeasure();
+  const L=[];
+  L.push('Глоу ап'+(S.name?' — '+S.name:'')+' · '+DOW_FULL[date.getDay()]+', '+fmtDate(date));
+  L.push('✅ Выполнено: '+sc.done+'/'+sc.total+' ('+sc.pct+'%)');
+  L.push('🔥 Серия: '+streak()+' дн.');
+  if(g) L.push('🏋️ '+g.t+': '+(dd.d[g.id]?'сделал':'нет'));
+  L.push('🍽 Приёмов пищи: '+fd+'/'+food.length);
+  L.push('💧 Вода: '+dd.w+'/8');
+  L.push('😴 Отбой вовремя: '+(dd.d.sleep?'да':'нет'));
+  if(ch) L.push('💬 Челлендж ('+ch.d+'): '+(dd.d.challenge?'выполнен':'нет'));
+  if(T.some(t=>t.id==='speech')) L.push('🗣 Дикция и речь: '+(dd.d.speech?'занимался':'нет'));
+  if(last) L.push('⚖️ Последний замер: '+fmtNum(last.weight)+' кг'+(last.height?', '+fmtNum(last.height)+' см':''));
+  return L.join('\n');
+}
+function weekReport(){
+  const today=parseKey(todayKey()); const L=[]; let sum=0,cnt=0,gymDone=0,gymTotal=0,sleepOk=0;
+  L.push('Глоу ап'+(S.name?' — '+S.name:'')+' · неделя до '+fmtDate(today));
+  const start=parseKey(S.start); const rows=[];
+  for(let i=6;i>=0;i--){
+    const d=addDays(today,-i); if(d<start) continue;
+    const sc=scoreFor(d), dd=dayData(keyOf(d));
+    rows.push(DOW_KEYS[d.getDay()]+' '+sc.pct+'%'); sum+=sc.pct; cnt++;
+    if([1,3,5].includes(d.getDay())){ gymTotal++; if(dd.d.gym) gymDone++; }
+    if(dd.d.sleep) sleepOk++;
+  }
+  L.push('📅 По дням: '+(rows.join(' · ')||'—'));
+  L.push('📊 В среднем: '+(cnt?Math.round(sum/cnt):0)+'%');
+  L.push('🔥 Серия: '+streak()+' дн.');
+  L.push('🏋️ Тренировок: '+gymDone+'/'+gymTotal);
+  L.push('😴 Отбой вовремя: '+sleepOk+' из '+cnt+' дней');
+  L.push('🗣 Дикция и речь: '+spSessionsWeek()+' занятий из 6');
+  { const p=(S.speech.par||[]).slice(-1)[0], w=(S.speech.wpm||[]).slice(-1)[0]; if(p) L.push('   слов-паразитов за минуту: '+p.n); if(w) L.push('   темп: '+w.w+' слов/мин'); }
+  const {last,prev,first}=lastMeasure();
+  if(last){
+    let s='⚖️ Вес: '+fmtNum(last.weight)+' кг';
+    if(prev) { const dv=last.weight-prev.weight; s+=' ('+(dv>=0?'+':'')+fmtNum(dv)+' за неделю)'; }
+    L.push(s);
+    if(last.height) L.push('📏 Рост: '+fmtNum(last.height)+' см'+(first&&first.height&&first!==last?' (с начала '+(last.height-first.height>=0?'+':'')+fmtNum(last.height-first.height)+')':''));
+    if(last.pull!=null && last.pull!=='') L.push('💪 Подтягивания: '+last.pull);
+  } else L.push('⚖️ Замеров пока нет');
+  return L.join('\n');
+}
+function waHref(text){ const p=(S.phone||'').replace(/\D/g,''); return 'https://wa.me/'+(p?p:'')+'?text='+encodeURIComponent(text); }
+function copyText(text){
+  const done=()=>toast('Скопировано');
+  const fallback=()=>{ const ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(e){} ta.remove(); toast(ok?'Скопировано':'Не получилось скопировать — выдели текст вручную'); };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done,fallback); } else fallback();
+}
+
+/* ================= ПЛАН ================= */
+const PLAN_TABS=[['grow','Рост'],['gym','Зал'],['skin','Кожа'],['hair','Волосы'],['style','Стиль'],['posture','Осанка и пресс'],['mind','Уверенность'],['hygiene','Ногти и зубы'],['no','Нельзя']];
+const PLAN = {
+grow:()=>`
+  <div class="prose">
+    <h2>Рост</h2>
+    <p class="lead">Сейчас 170–171 см. В 14 лет у парней самый быстрый рост — обычно 6–10 см в год, и он продолжается до 17–18 лет. Примерно 80% решает генетика. Остальные 20% — сон, еда и движение. Задача: дать организму всё и ничем не мешать.</p>
+    <div class="card">
+      <h3>Цель — 190 см: честно</h3>
+      <dl class="kv">
+        <dt>Сейчас</dt><dd>170–171 см в 14 лет — выше большинства сверстников (в среднем 163–165 см).</dd>
+        <dt>Темп</dt><dd>+8 см и больше за год, голос ломается — это самый пик скачка роста.</dd>
+        <dt>По родителям</dt><dd>Папа 182, мама ≈ 166 → прогноз ≈ 180 см (обычно от 172 до 189).</dd>
+        <dt>Реально</dt><dd>Ты уже растёшь выше «родительского» прогноза. Ориентир — <b>182–187 см</b>. 190 — верхняя граница: шанс есть, но это не гарантия.</dd>
+      </dl>
+      <p><b>Главное — время сейчас.</b> Пик скачка и следующие 1–2 года дадут ещё примерно 10–15 см, дальше рост замедляется и к 17–18 годам останавливается. Именно сейчас недосып и недоедание стоят дороже всего.</p>
+      <p class="small muted">Сделать кости длиннее, чем заложено генетикой, нельзя ничем. Можно другое: не потерять ни одного сантиметра из своего максимума и выглядеть выше.</p>
+    </div>
+    <div class="card">
+      <h3>Как выжать максимум</h3>
+      <ol class="clean">
+        <li><b>Сон 8,5–9 часов, отбой до 22:30.</b> Гормон роста выделяется в основном в глубоком сне в первые часы ночи. Засыпание в 00:00 — главный враг роста сейчас.</li>
+        <li><b>Есть досыта каждый день.</b> При 48 кг и 170 см организм работает на грани: если калорий не хватает, рост тормозит первым. Меню на ≈ 3 000 ккал — во вкладке «Еда».</li>
+        <li><b>Кальций и витамин D.</b> 3 порции молочного в день. Анализ на витамин D — через педиатра, при нехватке он назначит дозу.</li>
+        <li><b>Без энергетиков, вейпа и сигарет.</b> Никотин и недосып от кофеина мешают росту.</li>
+        <li><b>Спорт — да, перегруз — нет.</b> Силовые с тренером безопасны. Вредно только тренироваться до изнеможения и при этом недоедать.</li>
+        <li><b>Мерить раз в месяц</b> и записывать в «Прогресс». Если за год прибавил меньше 4 см, а сверстники растут — к педиатру.</li>
+        <li><b>По желанию — эндокринолог.</b> По рентгену кисти он определит костный возраст: сколько лет ещё открыты зоны роста и какой примерно будет взрослый рост. Гормон роста назначают только при реальной болезни, здоровому подростку его не дают.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Выглядеть выше уже сейчас · до +5 см визуально</h3>
+      <ul class="clean">
+        <li>Осанка: ровная спина и голова не «вперёд» — +2–3 см. Комплекс — в разделе «Осанка и пресс».</li>
+        <li>Стрижка с объёмом сверху и короткими висками — +1–2 см.</li>
+        <li>Одежда в один цвет или близкие тона сверху и снизу — фигура кажется длиннее.</li>
+        <li>Джинсы по длине, без «гармошки» внизу. Футболка не ниже середины ширинки — ноги кажутся длиннее.</li>
+        <li>Кроссовки на плотной подошве — ещё +2–3 см.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Прогноз по родителям</h3>
+      <p class="small muted">Формула для мальчиков: (рост папы + рост мамы + 13) ÷ 2. Реальный рост обычно в пределах ±8 см от прогноза — верхнюю часть диапазона как раз «добирают» сон и еда.</p>
+      <div class="form">
+        <label>Рост папы, см<input id="g-dad" type="number" inputmode="decimal" min="140" max="220" value="${esc(S.dad)}" placeholder="например, 178"></label>
+        <label>Рост мамы, см<input id="g-mom" type="number" inputmode="decimal" min="130" max="210" value="${esc(S.mom)}" placeholder="например, 164"></label>
+      </div>
+      <div id="g-out" class="num" style="font-family:var(--font-d);font-size:17px"></div>
+    </div>
+    <div class="card">
+      <h3>1. Сон — главный фактор</h3>
+      <ul class="clean">
+        <li><b>Цель — 8,5 часов:</b> отбой в 22:15, подъём в 06:50. Гормон роста выделяется в основном в глубоком сне в первые часы ночи. Сейчас засыпание около 00:00 — это меньше 7 часов.</li>
+        <li><b>Переход плавный:</b> неделя 1 — отбой в 23:30, неделя 2 — 23:00, неделя 3 — 22:30, дальше — 22:15. В пятницу и субботу можно на 30 минут позже. В распорядке время меняется само.</li>
+        <li>Телефон — не в кровати. Экран и лента сдвигают засыпание на час и больше.</li>
+        <li>В комнате темно и прохладно, 18–20 °C.</li>
+        <li>Никаких энергетиков. Чай и кофе — только до 14:00.</li>
+        <li>В воскресенье вставать не позже 9:00, иначе вечером не уснёшь вовремя.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>2. Еда — строительный материал</h3>
+      <ul class="clean">
+        <li>Хватает калорий: недоедание тормозит рост сильнее всего. Меню — во вкладке «Еда».</li>
+        <li>Кальций: 3 порции молочного в день (молоко, кефир, айран, творог, сыр).</li>
+        <li>Витамин D: с октября по апрель солнца мало. Сдать анализ «25(OH)D» и спросить педиатра про дозировку — сами не назначаем.</li>
+        <li>Цинк и железо: говядина, баранина, печень, гречка, фасоль, яйца.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>3. Движение</h3>
+      <ul class="clean">
+        <li>Силовые с правильной техникой рост не останавливают — это миф. Они укрепляют кости.</li>
+        <li>Баскетбол, волейбол, плавание, футбол — отличные дополнения в субботу.</li>
+        <li>Вис на турнике 2–3 раза по 20–30 секунд после каждой тренировки разгружает позвоночник.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>4. Осанка</h3>
+      <p>Ровная спина добавляет 2–3 см визуально сразу. Комплекс — в разделе «Осанка».</p>
+    </div>
+    <div class="card">
+      <h3>Как правильно мерить</h3>
+      <ol class="clean">
+        <li>Раз в месяц, в первое воскресенье, утром сразу после подъёма. Вечером человек ниже на 1–2 см.</li>
+        <li>Без обуви, пятки, ягодицы, лопатки и затылок — к стене.</li>
+        <li>Книгу или линейку на макушку, отметка карандашом, мерить рулеткой.</li>
+        <li>Записать во вкладке «Прогресс».</li>
+      </ol>
+    </div>
+    <div class="note">К педиатру или эндокринологу, если: рост заметно ниже, чем у сверстников и родителей; за год прибавил меньше 4 см; признаки взросления (голос, волосы на теле) сильно отстают от одноклассников. Врач сделает рентген кисти — по нему видно, сколько ещё открыты зоны роста.</div>
+    <div class="note red">Не работает: таблетки и БАДы «для роста», вытяжки и растяжки на тренажёрах, «гормон роста» без назначения врача. Стероиды и SARMs закрывают зоны роста навсегда.</div>
+  </div>`,
+gym:()=>{
+  const cur = S.ui.gymDay || nextGymDow();
+  const list = gymList(cur);
+  return `
+  <div class="prose">
+    <h2>Зал</h2>
+    <p class="lead">Уже 2 месяца с тренером: пн — грудь + трицепс, ср — спина + бицепс, пт — плечи + ноги. Программа тренера — главная. Здесь то, что добавляем сверху: разминка до прихода тренера, правила прогресса, журнал весов и пресс дома.</p>
+    <div class="card">
+      <h3>16:30–17:00 · пока ждёшь тренера</h3>
+      <ol class="clean">
+        <li>5–7 минут лёгкого кардио: велотренажёр или быстрая ходьба. Дольше не надо — калории нужны на массу.</li>
+        <li>Суставная разминка: плечи, локти, таз, колени — по 10 вращений.</li>
+        <li>Вис на турнике 2 × 20 секунд.</li>
+        <li>2 лёгких подхода первого упражнения дня с половиной рабочего веса.</li>
+        <li>Пресс перед тренировкой не качать — он нужен свежим, чтобы держать спину в тяжёлых упражнениях.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Правила прогресса</h3>
+      <ol class="clean">
+        <li><b>Техника важнее веса.</b> Не уверен — попроси тренера посмотреть подход.</li>
+        <li><b>1–2 повтора в запасе.</b> До отказа и на максимальный вес «на 1 раз» в 14 лет не работаем.</li>
+        <li><b>Двойная прогрессия.</b> Если тренер дал 3 × 8–12: когда во всех подходах сделал 12 — в следующий раз +1–2,5 кг и снова с 8.</li>
+        <li><b>Записывай</b> вес и повторы каждого упражнения в журнал ниже. Без записей прогресс идёт вслепую.</li>
+        <li><b>Боль в суставе или спине</b> (не жжение в мышце) — стоп и сразу сказать тренеру.</li>
+        <li>Ноги в программе раз в неделю. Для массы полезно спросить тренера про 2–3 подхода приседа или жима ногами ещё и в среду.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="section-head"><h3>Журнал весов</h3><span class="small muted">${SPLIT[cur]}</span></div>
+      <div class="chips" role="tablist" style="margin-inline:0;padding-inline:0">${[1,3,5].map(d=>`<button role="tab" data-act="gymday" data-v="${d}" aria-pressed="${d===cur}">${DOW_KEYS[d]} · ${SPLIT[d]}</button>`).join('')}</div>
+      <p class="small muted">Упражнения примерные — переименуй под те, что даёт тренер. Результат пиши как «40 кг × 10, 10, 8».</p>
+      ${list.map((e,i)=>`
+      <div class="ex">
+        <div class="n num">${i+1}</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;gap:6px"><input id="gn-${e.id}" type="text" data-gname="${cur}:${e.id}" value="${esc(e.nm)}" aria-label="Упражнение" style="font-weight:600"><button class="iconbtn" data-act="gymdel" data-v="${cur}:${e.id}" aria-label="Удалить упражнение">×</button></div>
+          <input id="gl-${e.id}" type="text" data-glast="${cur}:${e.id}" value="${esc(e.last||'')}" placeholder="последний результат" aria-label="Последний результат">
+        </div>
+      </div>`).join('')}
+      <div class="btnrow"><button class="btn sm" data-act="gymadd" data-v="${cur}">+ Добавить упражнение</button></div>
+    </div>
+    <div class="card soft">
+      <h3>После тренировки</h3>
+      <p>Вис на турнике 2 × 20–30 секунд, растяжка 5 минут. Дома — душ, потом спину и грудь протереть тонером, и ужин в течение часа.</p>
+    </div>
+    <div class="card">
+      <h3>Чего ждать</h3>
+      <dl class="kv">
+        <dt class="num">3–4 мес.</dt><dd>Заметно шире плечи и спина, футболки сидят по-другому.</dd>
+        <dt class="num">6 мес.</dt><dd>При нормальной еде 54–56 кг (сейчас ≈ 48). Часть веса — естественный рост.</dd>
+      </dl>
+    </div>
+    <div class="note">Креатин, предтренировочные комплексы, жиросжигатели и «тестобустеры» до 18 лет не нужны. Результат дают тренировки, еда и сон.</div>
+  </div>`;},
+skin:()=>`
+  <div class="prose">
+    <h2>Кожа</h2>
+    <p class="lead">Сейчас: много мелких бугорков на лбу и сыпь на спине и груди. В 14 лет это бывает у 8 из 10 парней, причина — гормоны и пот после зала, а не грязь. При ежедневном уходе кожа заметно чище через 2–3 месяца.</p>
+    <div class="note red">Мелкие одинаковые бугорки на лбу, груди и спине, которые чешутся и усиливаются после пота, бывают не обычными прыщами, а грибковым фолликулитом. Он выглядит похоже, но лечится другими средствами. Покажи кожу дерматологу — это один визит, и дальше план станет точнее.</div>
+    <div class="card">
+      <h3>Что уже есть и как этим пользоваться</h3>
+      <dl class="kv">
+        <dt>Пенка SKIN1004 Centella</dt><dd>Умывание утром и вечером. Горошину вспенить в ладонях, 30 секунд по лицу, смыть тёплой водой.</dd>
+        <dt>Тонер SOME BY MI AHA·BHA·PHA</dt><dd>Главное средство от бугорков на лбу: кислоты чистят поры. Утром на ватный диск, протереть лоб, нос и подбородок. Первые 2 недели — через день, потом каждый день. Сильно щиплет или краснеет — снова через день.</dd>
+        <dt>Маска Medipeel Herbal Peel Tox</dt><dd>Пока отложить. Это пилинг микроиглами — вместе с кислотами кожа раздражается, и воспалений становится больше. Через месяц, если кожа спокойная: не чаще раза в неделю, вечером, не на воспалённые прыщи, время — строго как на упаковке.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Утро · 3 минуты</h3>
+      <ol class="clean">
+        <li>Пенка Centella.</li>
+        <li>Тонер AHA·BHA·PHA на ватном диске (по графику выше).</li>
+        <li>Лёгкий крем — докупить.</li>
+        <li>SPF 30+ — докупить. После кислот кожа легче обгорает, даже зимой на снегу.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Вечер · 2 минуты</h3>
+      <ol class="clean">
+        <li>Пенка Centella.</li>
+        <li>Лёгкий крем.</li>
+      </ol>
+      <p class="small muted">Этап 2 — если через 4 недели бугорков на лбу не стало заметно меньше: вечером после умывания горошину адапалена 0,1% (Дифферин, Клензит) на весь лоб, через 5 минут крем. Тонер тогда — только утром через день. Первые 2–4 недели адапален может сушить и дать временное обострение — это нормально.</p>
+    </div>
+    <div class="card">
+      <h3>Спина и грудь</h3>
+      <ul class="clean">
+        <li>Душ сразу после зала, не ходить в потной футболке.</li>
+        <li>Пока ждёте врача: шампунь с кетоконазолом 2% (Низорал) как гель для душа — нанести на спину и грудь, подержать 5 минут, смыть. 3 раза в неделю (пн, ср, пт после зала), 2–3 недели. Если сыпь заметно ушла — скажи врачу: это подсказка, что причина грибковая.</li>
+        <li>В остальные дни после душа — протереть спину и грудь тонером на ватном диске.</li>
+        <li>Форма для зала — из ткани, отводящей пот. Стирать после каждой тренировки.</li>
+        <li>Простыню менять раз в неделю, наволочку — 2 раза.</li>
+        <li>Если за 6 недель не стало лучше — к дерматологу.</li>
+      </ul>
+    </div>
+    <div class="card soft">
+      <h3>Докупить</h3>
+      <ul class="clean">
+        <li>Лёгкий крем для жирной или проблемной кожи с пометкой «non-comedogenic» — например, SKIN1004 Centella Soothing Cream.</li>
+        <li>Солнцезащитный крем SPF 30–50, лёгкий, — например, SKIN1004 Hyalu-Cica Water-Fit Sun Serum.</li>
+        <li>По желанию: Базирон АС 5% — точечно на красные воспалённые прыщи.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Правила</h3>
+      <ul class="clean">
+        <li>Не давить: остаются пятна и рубцы на месяцы.</li>
+        <li>Не использовать всё сразу: пенка + тонер + крем — уже полный уход. Больше средств — больше раздражения.</li>
+        <li>Отдельное полотенце для лица, экран телефона протирать.</li>
+        <li>Чёлка не должна постоянно лежать на лбу.</li>
+        <li>Глину и спрей для волос — не на линию роста волос. После укладки вымыть руки.</li>
+        <li>Крем — лёгкий гель без масел: жирные кремы и масла могут усиливать сыпь.</li>
+        <li>Чешутся ли бугорки? Запиши и скажи дерматологу — это важно для диагноза.</li>
+      </ul>
+    </div>
+    <div class="note red">К дерматологу обязательно, если прыщи глубокие и болезненные, остаются рубцы или за 3 месяца нет улучшения.</div>
+  </div>`,
+hair:()=>`
+  <div class="prose">
+    <h2>Волосы</h2>
+    <p class="lead">Правильная стрижка — самый быстрый глоу ап: результат в тот же день. Волосы прямые и мягкие — такие ложатся плоско, поэтому главное для них — текстура и объём.</p>
+    <div class="card">
+      <h3>Выпадают волосы</h3>
+      <ul class="clean">
+        <li>Норма — до 50–100 волосков в день на расчёске и в душе.</li>
+        <li>Если заметно больше или волос стало меньше: частые причины в 14 лет — мало еды и белка, нехватка железа или витамина D, недосып, стресс. У худых подростков с недосыпом это бывает часто.</li>
+        <li>Сдать анализы через педиатра: общий анализ крови, ферритин, витамин D, ТТГ. Это обычная кровь из вены.</li>
+        <li>Уже сейчас помогают меню из вкладки «Еда» и сон по плану — волосы реагируют через 2–3 месяца.</li>
+        <li>Не сушить горячим феном вплотную, не тереть полотенцем, мокрые не расчёсывать жёстко.</li>
+        <li>Средства от выпадения для взрослых, например миноксидил, — только если назначит врач.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Форма лица → стрижка</h3>
+      <p class="small muted">Сфотографируй лицо анфас с убранными назад волосами и сравни ширину лба, скул и челюсти с длиной лица. Для мягких прямых волос лучше всего работают текстурный кроп и короткие виски с текстурой сверху: длинные мягкие пряди проседают.</p>
+      <dl class="kv">
+        <dt>Овальное</dt><dd>Подходит почти всё: текстурный кроп, квифф, мид-фейд.</dd>
+        <dt>Круглое</dt><dd>Объём сверху, короткие виски (фейд): квифф, андеркат. Избегать «шапки» одинаковой длины.</dd>
+        <dt>Квадратное</dt><dd>Текстурный кроп, короткий фейд, ёжик — подчёркивают челюсть.</dd>
+        <dt>Вытянутое</dt><dd>Без высокого объёма сверху. Французский кроп с чёлкой вперёд, виски не в ноль.</dd>
+        <dt>Широкий лоб</dt><dd>Средняя длина, «шторки» с пробором, текстура сверху, виски не слишком короткие.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Как говорить с барбером</h3>
+      <ol class="clean">
+        <li>Принеси 2–3 фото стрижки на похожих волосах (прямые, волнистые, густые).</li>
+        <li>Скажи, будешь ли укладывать каждый день или нужна стрижка «без укладки».</li>
+        <li>Попроси показать, как укладывать, и каким средством.</li>
+        <li>Повторять стрижку раз в 3–4 недели — напоминание есть в распорядке.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Мытьё</h3>
+      <ul class="clean">
+        <li>Через день и после каждой тренировки. Жирные корни у подростков — норма, мыть чаще можно.</li>
+        <li>Шампунь по типу кожи головы, кондиционер — только на длину, 1 минута.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Укладка · 2 минуты</h3>
+      <ol class="clean">
+        <li>На слегка влажные волосы — 3–4 пшика спрея с морской солью. Для мягких прямых волос это главное средство.</li>
+        <li>Высушить феном тёплым воздухом против направления роста, потом уложить в нужную сторону.</li>
+        <li>Матовая глина размером с горошину или немного пудры для объёма у корней. Паста с блеском утяжелит мягкие волосы.</li>
+        <li>Много средства — волосы выглядят грязными и опадают. Лучше добавить, чем переборщить.</li>
+      </ol>
+    </div>
+    <div class="note">Перхоть: шампунь с кетоконазолом 2% (Низорал, Микозорал) 2 раза в неделю, держать 3–5 минут, 4 недели. Потом раз в неделю для профилактики.</div>
+    <div class="card soft">
+      <h3>Лицо</h3>
+      <ul class="clean">
+        <li>Брови не выщипывать.</li>
+        <li>Пушок над губой — аккуратно сбрить станком, когда станет заметным. Бритьё не делает волосы гуще — это миф.</li>
+      </ul>
+    </div>
+  </div>`,
+style:()=>`
+  <div class="prose">
+    <h2>Стиль</h2>
+    <p class="lead">Одежда по размеру важнее бренда. Капсула из 15–18 вещей сочетается сама с собой — любые верх и низ из списка дают нормальный образ.</p>
+    <div class="card">
+      <h3>Капсула</h3>
+      <dl class="kv">
+        <dt>Футболки</dt><dd>5 однотонных: белая, чёрная, серый меланж, тёмно-синяя, оливковая или бежевая.</dd>
+        <dt>Тёплый верх</dt><dd>2 худи (серое, чёрное), 1 свитшот, 1 фланелевая рубашка поверх футболки.</dd>
+        <dt>Низ</dt><dd>2 джинсов прямого или свободного кроя (голубые и чёрные), 1 карго или трикотажные брюки.</dd>
+        <dt>Куртки</dt><dd>Бомбер или джинсовка на осень, тёмный пуховик или парка на зиму.</dd>
+        <dt>Обувь</dt><dd>Белые кожаные кеды, тёмные кроссовки на каждый день, зимние ботинки.</dd>
+        <dt>Детали</dt><dd>Однотонный рюкзак, простые часы, однотонные носки без растянутых резинок.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Как должно сидеть</h3>
+      <ul class="clean">
+        <li>Футболка: шов плеча на краю плеча, длина — до середины ширинки.</li>
+        <li>Худи: не висит мешком ниже бёдер, если это не осознанный оверсайз.</li>
+        <li>Джинсы: внизу лёгкая складка или ровно, без «гармошки».</li>
+        <li>В одном образе — не больше трёх цветов.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>5 готовых образов</h3>
+      <ol class="clean">
+        <li>Белая футболка + голубые джинсы + белые кеды.</li>
+        <li>Серое худи + чёрные джинсы + тёмные кроссовки.</li>
+        <li>Чёрная футболка + оливковые карго + белые кеды.</li>
+        <li>Фланелевая рубашка нараспашку поверх белой футболки + голубые джинсы.</li>
+        <li>Тёмно-синий свитшот + светлые брюки + белые кеды.</li>
+      </ol>
+    </div>
+    <div class="card soft">
+      <h3>Уход и покупки</h3>
+      <ul class="clean">
+        <li>Кроссовки чистить раз в неделю — в воскресенье, есть в распорядке.</li>
+        <li>Одежду вешать, катышки убирать машинкой.</li>
+        <li>Аромат не обязателен. Если есть — 1–2 пшика на шею, не на одежду.</li>
+        <li>На маркетплейсе смотри таблицу размеров и отзывы с фото. Лучше 3 хорошие вещи, чем 10 случайных.</li>
+      </ul>
+    </div>
+  </div>`,
+posture:()=>`
+  <div class="prose">
+    <h2>Осанка и пресс</h2>
+    <p class="lead">Ровная спина визуально добавляет 2–3 см роста и делает плечи шире. Во вторник, четверг и субботу дома: 12 минут осанка, потом 8 минут пресс.</p>
+    <div class="card">
+      <h3>Тест у стены</h3>
+      <p>Встань спиной к стене: пятки, ягодицы, лопатки и затылок касаются стены, между поясницей и стеной проходит ладонь. Если затылок до стены не достаёт — голова «уехала» вперёд от телефона.</p>
+    </div>
+    <div class="card">
+      <h3>Комплекс · 12 минут</h3>
+      <div class="ex"><div class="n">1</div><div><div class="nm">Вис на турнике</div><span class="sets">3 × 20–30 с</span><div class="cue">Плечи не поднимать к ушам, тело расслаблено.</div></div></div>
+      <div class="ex"><div class="n">2</div><div><div class="nm">Ангел у стены</div><span class="sets">2 × 10</span><div class="cue">Спина и руки прижаты к стене, медленно поднимай и опускай руки, как крылья.</div></div></div>
+      <div class="ex"><div class="n">3</div><div><div class="nm">Растяжка груди в дверном проёме</div><span class="sets">2 × 30 с</span><div class="cue">Предплечья на косяки, шаг вперёд до натяжения в груди.</div></div></div>
+      <div class="ex"><div class="n">4</div><div><div class="nm">Подбородок назад</div><span class="sets">2 × 10, задержка 3 с</span><div class="cue">Не опуская голову, отведи подбородок назад — «двойной подбородок». Убирает голову «вперёд».</div></div></div>
+      <div class="ex"><div class="n">5</div><div><div class="nm">Кошка — корова</div><span class="sets">10 раз</span><div class="cue">На четвереньках плавно округляй и прогибай спину.</div></div></div>
+      <div class="ex"><div class="n">6</div><div><div class="nm">Ягодичный мостик</div><span class="sets">2 × 15</span><div class="cue">Лёжа на спине, поднимай таз, сжимая ягодицы. Поясница не прогибается.</div></div></div>
+      <div class="ex"><div class="n">7</div><div><div class="nm">Супермен</div><span class="sets">2 × 12</span><div class="cue">Лёжа на животе, одновременно поднимай руки и ноги на 2 секунды.</div></div></div>
+    </div>
+    <div class="card">
+      <h3>Пресс · 8 минут</h3>
+      <div class="ex"><div class="n">1</div><div><div class="nm">Скручивания лёжа</div><span class="sets">3 × 15</span><div class="cue">Отрывай только лопатки, поясница прижата к полу. Руки у висков, шею не тянуть.</div></div></div>
+      <div class="ex"><div class="n">2</div><div><div class="nm">Обратные скручивания</div><span class="sets">3 × 12</span><div class="cue">Лёжа на спине, колени к груди, отрывай таз от пола. Медленно вниз.</div></div></div>
+      <div class="ex"><div class="n">3</div><div><div class="nm">Планка</div><span class="sets">3 × 30–45 с</span><div class="cue">Тело — прямая линия, таз не проваливается.</div></div></div>
+      <div class="ex"><div class="n">4</div><div><div class="nm">Боковая планка</div><span class="sets">2 × 20–30 с на сторону</span><div class="cue">Локоть под плечом, таз вверх.</div></div></div>
+      <div class="ex"><div class="n">5</div><div><div class="nm">Велосипед</div><span class="sets">2 × 20</span><div class="cue">Медленно, локоть к противоположному колену.</div></div></div>
+    </div>
+    <div class="note ok">Кубики видны, когда мышцы пресса выросли, а жира немного. У тебя жира и так мало, поэтому «сушиться» не нужно — нужно есть по меню и качать. Каждый день пресс не нужен: мышце тоже нужен отдых. Когда 15 скручиваний станут лёгкими — держи в руках блин 2,5–5 кг.</div>
+    <div class="card soft">
+      <h3>Привычки</h3>
+      <ul class="clean">
+        <li>Телефон — на уровне глаз, а не на коленях.</li>
+        <li>Рюкзак — на двух лямках.</li>
+        <li>За партой: таз к спинке стула, стопы на полу.</li>
+        <li>Каждые 30–40 минут встать и расправить плечи.</li>
+      </ul>
+    </div>
+  </div>`,
+mind:()=>`
+  <div class="prose">
+    <h2>Уверенность</h2>
+    <p class="lead">Уверенность — навык. Она тренируется так же, как присед: маленькими повторениями каждый день. Поэтому в распорядке есть «челлендж дня» — 30 штук по кругу, а для дикции и разговора — отдельная вкладка «Дикция».</p>
+    <div class="card">
+      <h3>Базовые привычки</h3>
+      <dl class="kv">
+        <dt>Взгляд</dt><dd>Держать зрительный контакт в разговоре. Если сложно — смотреть на переносицу.</dd>
+        <dt>Голос</dt><dd>Чуть медленнее и громче обычного, без «ну, типа, короче».</dd>
+        <dt>Поза</dt><dd>Плечи назад, подбородок параллельно полу, руки не прячутся в карманах.</dd>
+        <dt>Рукопожатие</dt><dd>Крепкое, короткое, с взглядом в глаза.</dd>
+        <dt>Навык</dt><dd>Одна вещь, в которой становишься сильнее каждый месяц: спорт, гитара, программирование, монтаж, язык.</dd>
+        <dt>Слово</dt><dd>Выполнил план дня — значит, держишь слово самому себе. Отсюда и берётся уверенность.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Соцсети</h3>
+      <ul class="clean">
+        <li>Сравнивай себя с собой месяц назад, а не с блогерами после фильтров и света.</li>
+        <li>Отпишись от аккаунтов, после которых чувствуешь себя хуже.</li>
+        <li>Вечером — одна строчка в заметках: что сегодня получилось.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Если нравится девушка</h3>
+      <ul class="clean">
+        <li>Будь собой. Притворство быстро видно.</li>
+        <li>Опрятность: чистые волосы, кожа, одежда, запах. Всё это уже есть в распорядке.</li>
+        <li>Разговаривай: спрашивай про её интересы и правда слушай ответы. Шути без подколов и унижений.</li>
+        <li>Будь увлечённым: зал, английский, хобби. Людям интересны те, у кого есть свои цели.</li>
+        <li>Начни с дружбы и общей компании: общие дела и прогулки — лучший старт.</li>
+        <li>Уважай её «нет» — без давления и навязчивости. Не обсуждай её с друзьями за спиной.</li>
+        <li>Если симпатия не взаимна — это нормально и не делает тебя хуже.</li>
+      </ul>
+    </div>
+    <div class="card soft">
+      <h3>Все 30 челленджей</h3>
+      <ol class="clean small">${CHALLENGES.map(c=>'<li>'+esc(c)+'</li>').join('')}</ol>
+    </div>
+  </div>`,
+hygiene:()=>`
+  <div class="prose">
+    <h2>Ногти, зубы, гигиена</h2>
+    <p class="lead">Это половина первого впечатления, и она не стоит почти ничего.</p>
+    <div class="card">
+      <h3>Погрызенные ногти</h3>
+      <p class="small muted">Руки видят все — когда здороваешься, пишешь, держишь телефон. Привычка грызть ногти обычно включается «на автомате»: на уроках, в телефоне, в играх или когда волнуешься. Её можно убрать за 4–6 недель.</p>
+      <ol class="clean">
+        <li><b>Коротко подстричь и подпилить края пилкой.</b> Гладкий край меньше тянет грызть. Каждое воскресенье — есть в распорядке.</li>
+        <li><b>Горький лак</b> от обгрызания ногтей (в аптеке, «стоп-грызть») — бесцветный, наносить каждые 2–3 дня. Горечь срабатывает как напоминание.</li>
+        <li><b>Заметь, когда грызёшь.</b> На эти моменты — чем занять руки: эспандер, антистресс-мячик, ручка.</li>
+        <li><b>Кожа вокруг ногтей тоже обкусана</b> — ранки и заусенцы. Ранки промывать хлоргексидином, на ночь — заживляющий крем с декспантенолом (Бепантен). Заусенцы не отрывать и не откусывать — срезать маникюрными кусачками.</li>
+        <li><b>Масло или крем для кутикулы</b> каждый вечер, когда ранки заживут. Мягкая кожа меньше трескается — меньше соблазна её откусить.</li>
+        <li><b>Отмечай в распорядке «не грыз сегодня».</b> Через 3–4 недели ногти отрастут, и ломать серию будет жалко.</li>
+      </ol>
+      <p class="small muted">Ноготь отрастает примерно на 3 мм в месяц — через 2–3 месяца без грызения руки будут выглядеть нормально. Если кожа вокруг ногтя покраснела, опухла, болит или появился гной — к врачу, это воспаление.</p>
+    </div>
+    <div class="card">
+      <h3>Зубы</h3>
+      <dl class="kv">
+        <dt>Паста Clinica</dt><dd>Основная, утром и вечером по 2 минуты. В ней много фтора — после чистки просто сплюнь, не полощи рот водой, тогда фтор дольше защищает эмаль.</dd>
+        <dt>Угольная паста</dt><dd>Лучше не использовать. Уголь царапает эмаль, и со временем зубы выглядят желтее. Максимум — раз в неделю.</dd>
+        <dt>Белее</dt><dd>Профессиональная чистка у стоматолога раз в полгода: снимает налёт и камень, зубы светлее на 1–2 тона. Меньше колы и крепкого чая. Отбеливающие полоски и гели — только по совету стоматолога.</dd>
+        <dt>Нить</dt><dd>Вечером, между всеми зубами.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>Душ</b> каждый день и после каждого зала.</li>
+        <li><b>Антиперспирант</b> утром на сухую кожу. Спрей-дезодорант запах только маскирует.</li>
+        <li><b>Стоматолог</b> раз в полгода.</li>
+        <li><b>Одежда и носки</b> — свежие каждый день. Спортивную форму стирать после каждой тренировки.</li>
+        <li><b>Обувь:</b> кроссовки проветривать, стельки сушить.</li>
+        <li><b>Губы:</b> зимой гигиеническая помада.</li>
+        <li><b>Наволочка</b> — 2 раза в неделю, полотенце для лица — отдельное.</li>
+      </ul>
+    </div>
+  </div>`,
+no:()=>`
+  <div class="prose">
+    <h2>Нельзя</h2>
+    <p class="lead">Популярные в TikTok «лайфхаки», которые вредят или не работают.</p>
+    <div class="card">
+      <dl class="kv">
+        <dt>Стероиды, SARMs</dt><dd>Могут навсегда закрыть зоны роста, бьют по гормонам, печени и коже. Также «тестобустеры», пептиды, гормон роста без врача.</dd>
+        <dt>Предтрены, энергетики</dt><dd>Много кофеина: ломают сон, а значит, и рост. Креатин и жиросжигатели до 18 лет тоже не нужны.</dd>
+        <dt>Bone smashing</dt><dd>Бить себя по лицу ради скул — это травмы и переломы. Кости так не растут.</dd>
+        <dt>Mewing как чудо</dt><dd>Правильное положение языка не вредит, но форму лица заметно не изменит.</dd>
+        <dt>Голодовки, «сушка»</dt><dd>Тормозят рост и набор мышц. Пресс в 14 лет появляется от нормальной еды и спорта.</dd>
+        <dt>Вытяжки «для роста»</dt><dd>Висеть с грузом на ногах и растягиваться на тренажёрах бесполезно — кости не удлиняются.</dd>
+        <dt>Домашние пилинги</dt><dd>Кислоты, скрабы, выдавливание прыщей — ожоги, пятна и рубцы.</dd>
+        <dt>Вейп и сигареты</dt><dd>Хуже восстановление, кожа и зубы.</dd>
+        <dt>Отбой после полуночи</dt><dd>Даже в каникулы. Рост и мышцы делаются ночью.</dd>
+      </dl>
+    </div>
+  </div>`
+};
+function nextGymDow(){ let d=parseKey(todayKey()); for(let i=0;i<7;i++){ if([1,3,5].includes(d.getDay())) return d.getDay(); d=addDays(d,1);} return 1; }
+function gymList(dow){
+  if(!S.gym[dow]) S.gym[dow]=GYM_DEFAULT[dow].map((nm,i)=>({id:'g'+dow+'_'+i,nm,last:''}));
+  return S.gym[dow];
+}
+function renderPlan(){
+  const el=$('#tab-plan'); const cur=S.ui.plan in PLAN ? S.ui.plan : 'grow';
+  el.innerHTML = `
+    <div class="top"><div><div class="eyebrow">Подробный план</div><h1>Что и как делать</h1></div></div>
+    <div class="chips" role="tablist">${PLAN_TABS.map(([k,n])=>`<button role="tab" data-act="plan" data-v="${k}" aria-pressed="${k===cur}">${n}</button>`).join('')}</div>
+    <div id="planBody">${PLAN[cur]()}</div>`;
+  if(cur==='grow') calcGenetic();
+  const act=el.querySelector('.chips [aria-pressed="true"]'); if(act) act.scrollIntoView({block:'nearest',inline:'center'});
+}
+function calcGenetic(){
+  const out=$('#g-out'); if(!out) return;
+  const d=parseFloat(S.dad), m=parseFloat(S.mom);
+  if(d>120 && m>120){ const p=(d+m+13)/2; out.innerHTML=`Прогноз: ≈ ${Math.round(p)} см <span class="small muted" style="font-family:var(--font-b)">(обычно от ${Math.round(p-8)} до ${Math.round(p+8)} см)</span>`; }
+  else out.innerHTML='<span class="small muted" style="font-family:var(--font-b)">Впиши рост родителей — появится прогноз.</span>';
+}
+
+/* ================= ЕДА ================= */
+function renderFood(){
+  const el=$('#tab-food'); const todayK=DOW_KEYS[new Date().getDay()];
+  const cur=S.ui.menu||todayK; const M=MENU[cur]; const we=(cur==='Сб'||cur==='Вс');
+  const times=MEAL_TIMES[DOW_KEYS.indexOf(cur)];
+  const order=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  const gymDay = ['Пн','Ср','Пт'].includes(cur);
+  el.innerHTML = `
+  <div class="top"><div><div class="eyebrow">Питание · халяль</div><h1>Еда на неделю</h1></div></div>
+  <p>Посчитано под тебя: 170 см, ≈ 48 кг, зал 3 раза и английский 3 раза в неделю. Считать калории не нужно — меню уже посчитано. Готовишь сам или дома — главное, не пропускать приёмы.</p>
+  <div class="note ok">Цель: +1–1,5 кг в месяц. Реально за полгода выйти на 54–56 кг — часть уйдёт в рост.</div>
+  <div class="tiles">
+    <div class="tile"><div class="v num">≈ 3 000</div><div class="k">ккал в день</div></div>
+    <div class="tile"><div class="v num">130–160 г</div><div class="k">белка (минимум 100 г)</div></div>
+    <div class="tile"><div class="v num">3 порции</div><div class="k">молочного — кальций для костей</div></div>
+    <div class="tile"><div class="v num">2–2,5 л</div><div class="k">воды, в дни зала больше</div></div>
+  </div>
+
+  <div class="section-head"><h2>Меню</h2><span class="small muted">${gymDay?'день зала':(we?'выходной':'день без зала')}</span></div>
+  <div class="chips" role="tablist">${order.map(k=>`<button role="tab" data-act="menu" data-v="${k}" aria-pressed="${k===cur}">${k}${k===todayK?' · сегодня':''}</button>`).join('')}</div>
+  <div class="card">
+    ${M.meals.map((m,i)=>`
+      <div class="meal">
+        <div class="time num">${times[i]}</div>
+        <div><div class="lab">${i===3&&gymDay?'Перед залом':(i===3&&(cur==='Вт'||cur==='Чт')?'Перед английским':(i===1&&!we?'В школе':MEAL_LABELS[i]))}</div><div class="nm">${esc(m.name)}</div>${m.hint?`<div class="hint">${esc(m.hint)}</div>`:''}</div>
+        <div class="kc num">${m.kcal} ккал<br>${m.p} г белка</div>
+      </div>`).join('')}
+    <div class="totals num"><span>Итого ≈ ${M.kcal.toLocaleString('ru-RU')} ккал</span><span>белок ${M.p} г</span><span class="muted">жиры ${M.f} г · углеводы ${M.c} г</span></div>
+  </div>
+  <p class="small muted">Плов, лагман, манты, бешбармак и суп — из общего семейного стола. Если их сегодня нет — любое мясо + гарнир из списка замен.</p>
+
+  <div class="card">
+    <h3>Домашний гейнер · ≈ 450 ккал, 17 г белка</h3>
+    <p>В блендер: 300 мл молока, 1 банан, 2 ст. л. овсянки, 1 ст. л. арахисовой пасты, 1 ч. л. мёда. Взбить 30 секунд.</p>
+    <p class="small muted">Варианты: + 2 ст. л. творога (ещё +5 г белка); вместо банана — горсть замороженных ягод.</p>
+  </div>
+
+  <div class="card">
+    <h3>10 правил</h3>
+    <ol class="clean">
+      <li>Есть 6 раз в день, каждые 2,5–3 часа. Пропущенный завтрак — минус 600 ккал, которые уже не догонишь. Обед — сразу как пришёл из школы.</li>
+      <li>В каждом приёме: белок (мясо, яйца, творог, рыба, бобовые) + углеводы (каша, рис, макароны, хлеб, картошка) + овощ или фрукт.</li>
+      <li>Три порции молочного: стакан молока, кефира или айрана, творог, кусок сыра.</li>
+      <li>Вода: 8 стаканов, в дни зала +2. Светлая моча — значит, пьёшь достаточно.</li>
+      <li>Газировка, энергетики, холодный чай из бутылки — нет. Сок — не больше стакана в день.</li>
+      <li>Фастфуд и сладкое — 1–2 раза в неделю, после нормальной еды, а не вместо неё.</li>
+      <li>После зала поесть в течение часа — это ужин в 18:45.</li>
+      <li>Протеин не обязателен: меню уже даёт достаточно белка. Если хочется — одна порция молочного протеина в день вместо гейнера.</li>
+      <li>Мясо — халяль: говядина, курица, индейка, баранина, конина, рыба.</li>
+      <li>Взвешиваться раз в неделю, в воскресенье утром. Нормальный темп — +1–2 кг в месяц.</li>
+    </ol>
+  </div>
+
+  <div class="card soft">
+    <h3>Если вес не так</h3>
+    <dl class="kv">
+      <dt>Стоит 2 недели</dt><dd>Добавь гейнер ещё раз в день — например, вместо перекуса перед залом или как третий приём вечером.</dd>
+      <dt>+1 кг в неделю и больше, растёт живот</dt><dd>Убери печенье и сладкое, гейнер — только в дни зала.</dd>
+      <dt>Нет аппетита</dt><dd>Больше жидких калорий: гейнер, кефир, айран, молоко. Их легче выпить, чем съесть.</dd>
+    </dl>
+  </div>
+
+  <div class="card">
+    <h3>Замены</h3>
+    <dl class="kv">
+      <dt>Курица</dt><dd>индейка, говядина, рыба или 3 яйца</dd>
+      <dt>Гречка</dt><dd>рис, макароны, картошка, булгур</dd>
+      <dt>Творог</dt><dd>греческий йогурт, 2 стакана кефира или 50 г сыра</dd>
+      <dt>Орехи</dt><dd>семечки, арахис</dd>
+      <dt>Банан</dt><dd>яблоко + пара фиников, хурма</dd>
+    </dl>
+  </div>
+
+  <div class="card">
+    <h3>Что взять в школу</h3>
+    <ul class="clean">
+      <li>Бутерброды с сыром или курицей на цельнозерновом хлебе</li>
+      <li>Ролл в лаваше с курицей или тунцом</li>
+      <li>Питьевой йогурт + банан</li>
+      <li>Орехи + сухофрукты</li>
+      <li>Творожный сырок без глазури</li>
+      <li>Курт — солёный, после него пить воду</li>
+    </ul>
+  </div>
+
+  <div class="note">Витамин D: с октября по апрель солнца мало. Сдай анализ «25(OH)D» и спроси педиатра про дозировку — сами витамины не назначаем.</div>
+
+  <div class="section-head"><h2>Покупки на неделю</h2><button class="more" data-act="shopreset">Сбросить отметки</button></div>
+  <p class="small muted">Количество — на твои порции на 7 дней, без семейных блюд.</p>
+  ${SHOP.map(([g,items],gi)=>`
+  <div class="card">
+    <h3>${g}</h3>
+    <div class="shop">${items.map(([n,q],ii)=>{const id='sh-'+gi+'-'+ii; const on=!!S.shop[id]; return `<label class="${on?'got':''}" for="${id}"><input type="checkbox" id="${id}" data-shop="${id}" ${on?'checked':''}><span>${n} <span class="q">— ${q}</span></span></label>`;}).join('')}</div>
+  </div>`).join('')}`;
+  const act=el.querySelector('.chips [aria-pressed="true"]'); if(act) act.scrollIntoView({block:'nearest',inline:'center'});
+}
+
+/* ================= ПРОГРЕСС ================= */
+let delArm=null, restoreArm=false;
+function lineChart(points,key,unit,color){
+  const pts=points.filter(p=>p[key]!=null && p[key]!=='' && !isNaN(p[key]));
+  if(pts.length<2) return `<p class="small muted">Нужно минимум 2 замера — график появится после второго воскресенья.</p>`;
+  const W=320,H=150,L=34,R=10,T=12,B=26;
+  const vals=pts.map(p=>+p[key]); let mn=Math.min(...vals), mx=Math.max(...vals);
+  const pad=Math.max((mx-mn)*0.15, key==='height'?1:0.5); mn-=pad; mx+=pad;
+  const t0=parseKey(pts[0].date).getTime(), t1=parseKey(pts[pts.length-1].date).getTime(); const span=Math.max(t1-t0,1);
+  const x=t=>L+(W-L-R)*((t-t0)/span), y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn));
+  const ticks=[mn+(mx-mn)*0.1, (mn+mx)/2, mx-(mx-mn)*0.1];
+  const path=pts.map((p,i)=>(i?'L':'M')+x(parseKey(p.date).getTime()).toFixed(1)+' '+y(+p[key]).toFixed(1)).join(' ');
+  const area=path+` L${x(t1).toFixed(1)} ${H-B} L${x(t0).toFixed(1)} ${H-B} Z`;
+  const last=pts[pts.length-1];
+  const d0=parseKey(pts[0].date), d1=parseKey(last.date);
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="График: ${unit}">
+    ${ticks.map(v=>`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/><text x="${L-6}" y="${(y(v)+3).toFixed(1)}" text-anchor="end">${fmtNum(v)}</text>`).join('')}
+    <path d="${area}" style="fill:${color}" opacity=".12"/>
+    <path class="ln" d="${path}" style="stroke:${color}"/>
+    ${pts.map(p=>`<circle cx="${x(parseKey(p.date).getTime()).toFixed(1)}" cy="${y(+p[key]).toFixed(1)}" r="2.5" style="fill:${color}"/>`).join('')}
+    <circle cx="${x(t1).toFixed(1)}" cy="${y(+last[key]).toFixed(1)}" r="5" style="fill:${color};stroke:var(--surface)" stroke-width="2"/>
+    <text x="${L}" y="${H-8}" text-anchor="start">${d0.getDate()}.${String(d0.getMonth()+1).padStart(2,'0')}</text>
+    <text x="${W-R}" y="${H-8}" text-anchor="end">${d1.getDate()}.${String(d1.getMonth()+1).padStart(2,'0')}</text>
+  </svg>`;
+}
+function heatmap(){
+  const today=parseKey(todayKey()); const start=parseKey(S.start);
+  const dowMon=(today.getDay()+6)%7; const lastMon=addDays(today,-dowMon); const first=addDays(lastMon,-7*7);
+  let h='<div class="heat"><span></span>'+['пн','вт','ср','чт','пт','сб','вс'].map(d=>`<span style="text-align:center">${d}</span>`).join('');
+  for(let w=0;w<8;w++){
+    const wd=addDays(first,w*7); h+=`<span class="num" style="align-self:center">${wd.getDate()}</span>`;
+    for(let i=0;i<7;i++){
+      const d=addDays(wd,i);
+      if(d>today){ h+='<span class="c fut"></span>'; continue; }
+      if(d<start){ h+='<span class="c" style="opacity:.35"></span>'; continue; }
+      const p=scoreFor(d).pct; const l=p>=80?'l3':p>=50?'l2':p>0?'l1':'';
+      h+=`<span class="c ${l} ${keyOf(d)===keyOf(today)?'today':''}" title="${fmtDate(d)}: ${p}%"></span>`;
+    }
+  }
+  return h+'</div>';
+}
+function renderProgress(){
+  const el=$('#tab-progress'); const ms=[...S.measures].sort((a,b)=>a.date<b.date?-1:1);
+  const {last,first}=lastMeasure();
+  const dW = last&&first&&last!==first ? last.weight-first.weight : null;
+  const dH = last&&first&&last!==first&&last.height&&first.height ? last.height-first.height : null;
+  el.innerHTML = `
+  <div class="top"><div><div class="eyebrow">С ${fmtDate(parseKey(S.start))}</div><h1>Прогресс</h1></div></div>
+  <div class="tiles">
+    <div class="tile"><div class="v num">${last?fmtNum(last.weight)+' кг':'—'}</div><div class="k">вес${dW!=null?' · '+(dW>=0?'+':'')+fmtNum(dW)+' с начала':''}</div></div>
+    <div class="tile"><div class="v num">${last&&last.height?fmtNum(last.height)+' см':'—'}</div><div class="k">рост${dH!=null?' · '+(dH>=0?'+':'')+fmtNum(dH)+' с начала':''}</div></div>
+    <div class="tile"><div class="v num" style="display:flex;gap:6px;align-items:center">${ICON.flame}${streak()}</div><div class="k">серия дней</div></div>
+    <div class="tile"><div class="v num">${last&&last.pull!=null&&last.pull!==''?last.pull:'—'}</div><div class="k">подтягиваний за раз</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Новый замер</h3>
+    <form id="mform" class="form">
+      <label>Дата<input id="m-date" type="date" value="${todayKey()}" required></label>
+      <label>Вес, кг<input id="m-weight" type="number" inputmode="decimal" step="0.1" min="25" max="150" required placeholder="50,5"></label>
+      <label>Рост, см<input id="m-height" type="number" inputmode="decimal" step="0.1" min="120" max="220" placeholder="раз в месяц"></label>
+      <label>Подтягивания<input id="m-pull" type="number" inputmode="numeric" step="1" min="0" max="60" placeholder="максимум"></label>
+      <button class="btn primary full" type="submit">Сохранить замер</button>
+    </form>
+  </div>
+
+  <div class="card"><div class="section-head"><h3>Вес, кг</h3><span class="small muted">цель: +1–2 кг в месяц</span></div>${lineChart(ms,'weight','вес','var(--accent)')}</div>
+  <div class="card"><div class="section-head"><h3>Рост, см</h3><span class="small muted">мерить утром</span></div>${lineChart(ms,'height','рост','var(--ok)')}</div>
+
+  <div class="card">
+    <div class="section-head"><h3>Выполнение плана</h3><span class="small muted">8 недель</span></div>
+    ${heatmap()}
+    <div class="small muted" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <span style="display:inline-flex;gap:5px;align-items:center"><span class="c" style="width:12px;height:12px;border-radius:3px;background:var(--line);display:inline-block"></span>0%</span>
+      <span style="display:inline-flex;gap:5px;align-items:center"><span style="width:12px;height:12px;border-radius:3px;background:var(--accent);opacity:.3;display:inline-block"></span>до 50%</span>
+      <span style="display:inline-flex;gap:5px;align-items:center"><span style="width:12px;height:12px;border-radius:3px;background:var(--accent);opacity:.6;display:inline-block"></span>50–79%</span>
+      <span style="display:inline-flex;gap:5px;align-items:center"><span style="width:12px;height:12px;border-radius:3px;background:var(--accent);display:inline-block"></span>80%+ — день засчитан</span>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <h3>Отчёт за неделю</h3>
+    <p class="small muted">Каждое воскресенье отправляй итог недели в WhatsApp: проценты по дням, тренировки, сон, вес и рост.</p>
+    <div class="btnrow">
+      <a class="btn wa" href="#" target="_blank" rel="noopener" data-act="wa" data-v="week">Отправить в WhatsApp</a>
+      <button class="btn" data-act="copy" data-v="week">Скопировать текст</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Все замеры</h3>
+    ${ms.length?`<div class="mlist">${[...ms].reverse().map(m=>`<div class="mrow"><div class="num"><b>${fmtDate(parseKey(m.date))}</b> · ${fmtNum(m.weight)} кг${m.height?' · '+fmtNum(m.height)+' см':''}${m.pull!=null&&m.pull!==''?' · '+m.pull+' подт.':''}</div><button class="btn sm ${delArm===m.id?'danger':''}" data-act="mdel" data-v="${m.id}">${delArm===m.id?'Точно удалить?':'Удалить'}</button></div>`).join('')}</div>`:'<p class="small muted">Пока пусто. Первый замер — в ближайшее воскресенье утром (или прямо сейчас, чтобы была точка отсчёта).</p>'}
+  </div>
+
+  <div class="card">
+    <h3>Настройки</h3>
+    <div class="form">
+      <label class="full">Имя<input id="s-name" type="text" value="${esc(S.name)}" placeholder="как к тебе обращаться"></label>
+      <label>Старт программы<input id="s-start" type="date" value="${esc(S.start)}"></label>
+      <label>WhatsApp для отчётов<input id="s-phone" type="tel" value="${esc(S.phone)}" placeholder="+7 7__ ___ __ __"></label>
+    </div>
+    <p class="small muted">Если указать номер, отчёт сразу откроется в нужном чате. Без номера WhatsApp предложит выбрать контакт.</p>
+    <div class="btnrow"><button class="btn sm" data-act="go" data-v="remind">Настроить напоминания</button></div>
+  </div>
+
+  <div class="card soft">
+    <h3>Резервная копия</h3>
+    <p class="small muted">Все отметки хранятся только на этом телефоне. Раз в месяц сохраняй код — отправь его себе в «Избранное» WhatsApp. Если сменишь телефон или очистишь браузер, вставь код обратно.</p>
+    <div class="btnrow"><button class="btn sm" data-act="backup">Скопировать код</button></div>
+    <label for="backup-in" class="small muted">Восстановить из кода</label>
+    <textarea id="backup-in" placeholder="Вставь сюда код резервной копии"></textarea>
+    <div class="btnrow"><button class="btn sm ${restoreArm?'danger':''}" data-act="restore">${restoreArm?'Заменить текущие данные?':'Восстановить'}</button></div>
+  </div>`;
+}
+
+/* ================= НАПОМИНАНИЯ ================= */
+function nextDateFor(r){
+  const t=parseKey(todayKey());
+  for(let i=1;i<=7;i++){ const d=addDays(t,i); if(r.days==='DAILY' || r.days.some(c=>DAYCODE[c]===d.getDay())) return d; }
+  return addDays(t,1);
+}
+function gcalLink(r){
+  const d=nextDateFor(r); const [h,m]=r.time.split(':').map(Number);
+  const s=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h,m); const e=new Date(s.getTime()+r.dur*60000);
+  const f=x=>x.getFullYear()+String(x.getMonth()+1).padStart(2,'0')+String(x.getDate()).padStart(2,'0')+'T'+String(x.getHours()).padStart(2,'0')+String(x.getMinutes()).padStart(2,'0')+'00';
+  const rr = r.days==='DAILY' ? 'RRULE:FREQ=DAILY' : 'RRULE:FREQ=WEEKLY;'+(r.interval?'INTERVAL='+r.interval+';':'')+'BYDAY='+r.days.join(',');
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Глоу ап: '+r.t)+'&details='+encodeURIComponent(r.d)+'&dates='+f(s)+'/'+f(e)+'&recur='+encodeURIComponent(rr);
+}
+function daysLabel(r){
+  if(r.days==='DAILY') return 'каждый день';
+  const s=r.days.join(',');
+  if(s==='MO,TU,WE,TH,FR') return 'пн–пт';
+  return (r.interval?'раз в '+r.interval+' недели, ':'')+r.days.map(c=>DAYNAME_SHORT[c]).join(', ');
+}
+function renderRemind(){
+  const el=$('#tab-remind'); const added=REMINDERS.filter(r=>S.remind[r.id]).length;
+  el.innerHTML = `
+  <div class="top"><div><div class="eyebrow">Redmi · Google Календарь</div><h1>Напоминания</h1></div><button class="btn sm" data-act="back">← Назад</button></div>
+  <p>Приложение не может само присылать уведомления, когда закрыто. Поэтому ставим напоминания в Google Календарь один раз — дальше они повторяются сами.</p>
+  <div class="card">
+    <h3>Настройка на Redmi · 5 минут</h3>
+    <ol class="clean">
+      <li>В Google Календаре: меню ☰ → Настройки → твой аккаунт → уведомления по умолчанию для мероприятий → «За 0 минут» (или «За 5 минут»). Сделай это до добавления.</li>
+      <li>Нажимай «Добавить» у каждого пункта ниже → откроется Google Календарь → «Сохранить». Повтор уже настроен.</li>
+      <li>Чтобы MIUI не глушил уведомления: Настройки → Приложения → Календарь → Контроль активности (Экономия заряда) → «Нет ограничений». Там же проверь, что уведомления включены.</li>
+      <li>Подъём и отбой надёжнее поставить будильником в приложении «Часы».</li>
+      <li>Чтобы приложение было под рукой: в Chrome ⋮ → «Добавить на главный экран».</li>
+    </ol>
+  </div>
+  <div class="section-head"><h2>Список</h2><span class="small muted num">добавлено ${added} из ${REMINDERS.length}</span></div>
+  <div class="card">
+    ${REMINDERS.map(r=>`
+    <div class="rem">
+      <div class="time num">${r.time}</div>
+      <div>
+        <div style="font-weight:600">${esc(r.t)}</div>
+        <div class="days">${daysLabel(r)}${r.alarm?' · лучше будильником':''}</div>
+        <div class="small muted" style="margin-top:2px">${esc(r.d)}</div>
+        <div class="acts">
+          ${r.late?'<div class="small" style="color:var(--warn);width:100%">Добавь с 4-й недели. До этого — будильник в «Часах» по времени из распорядка.</div>':''}
+          <a class="btn sm primary" href="${gcalLink(r)}" target="_blank" rel="noopener" data-act="gcal" data-v="${r.id}">Добавить</a>
+          ${S.remind[r.id]?`<button class="btn sm" data-act="unrem" data-v="${r.id}">Отменить отметку</button><span class="added">✓ добавлено</span>`:''}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <p class="small muted">Если ссылка открылась в браузере, а не в приложении — войди в тот же Google-аккаунт, что на телефоне, и нажми «Сохранить». Событие появится в Календаре на телефоне.</p>`;
+}
+
+/* ================= РЕЧЬ ================= */
+const WARMUP = [
+  {n:'Дыхание животом',s:40,d:'Ладонь на живот. Вдох носом на 4 счёта — живот надувается, плечи на месте. Выдох на «с-с-с» на 8 счётов.'},
+  {n:'Зевок',s:20,d:'Сладко зевни с открытым ртом 3 раза. Горло раскрывается, голос становится ниже и объёмнее.'},
+  {n:'Губы «пр-р-р»',s:20,d:'Расслабленные губы вибрируют на выдохе, как у лошади. 3 раза по 5 секунд.'},
+  {n:'Улыбка — трубочка',s:30,d:'Широкая улыбка на 2 счёта, губы трубочкой на 2 счёта. 10 раз.'},
+  {n:'Часики',s:30,d:'Рот открыт, кончик языка касается левого и правого уголка губ. 20 раз, челюсть не двигается.'},
+  {n:'Лошадка',s:20,d:'Цокай языком, присасывая его к нёбу. 15 раз громко и чётко.'},
+  {n:'Гласные',s:30,d:'Чётко и широко открывая рот: А — Э — И — О — У — Ы. Потом в обратном порядке. 3 круга.'},
+  {n:'Согласные',s:30,d:'Быстро и чётко: ПТК-ПТК-ПТК, потом БДГ-БДГ-БДГ. В конце «дры-дры-дры» для звука «Р».'}
+];
+const TWISTERS = {
+  easy:['На дворе трава, на траве дрова.','Шла Саша по шоссе и сосала сушку.','От топота копыт пыль по полю летит.','Жутко жуку жить на суку.','Добыл бобов бобыль.','Проворонила ворона воронёнка.','Сыворотка из-под простокваши.'],
+  mid:['Карл у Клары украл кораллы, а Клара у Карла украла кларнет.','Ехал Грека через реку, видит Грека — в реке рак. Сунул Грека руку в реку, рак за руку Греку цап!','Корабли лавировали, лавировали, да не вылавировали.','Везёт Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Соньку в лоб, все в сугроб.','Бык тупогуб, тупогубенький бычок, у быка бела губа была тупа.','Кукушка кукушонку купила капюшон. Надел кукушонок капюшон — как в капюшоне он смешон!','Четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами чертёж.'],
+  hard:['Всех скороговорок не перескороговоришь, не перевыскороговоришь.','Сшит колпак не по-колпаковски, вылит колокол не по-колоколовски. Надо колпак переколпаковать, перевыколпаковать, надо колокол переколоколовать, перевыколоколовать.','Интервьюер интервента интервьюировал.','Регулировщик-лигуриец регулировал в Лигурии.','Расскажите про покупки. — Про какие про покупки? — Про покупки, про покупки, про покупочки свои.','Инцидент с интендантом прецедентом не является.','Протокол про протокол протоколом запротоколировали.']
+};
+const TW_LEVELS=[['easy','Лёгкие'],['mid','Средние'],['hard','Сложные']];
+const SOUNDS = [
+  {id:'r',n:'Р',prep:[['Грибок','Присоси язык к нёбу и открывай рот, растягивая уздечку. 10 секунд × 3.'],['Барабанщик','Кончик языка быстро стучит за верхними зубами: «д-д-д-д», как пулемёт. 10 секунд.'],['Маляр','Кончиком языка «покрась» нёбо от зубов назад. 10 раз.']],
+    syl:'ДРА-ДРО-ДРУ-ДРЫ · ТРА-ТРО-ТРУ-ТРЫ · РА-РО-РУ-РЫ · АР-ОР-УР-ЫР',words:'трава, дракон, рыба, парк, ведро, мир, корабль, характер, карандаш, тренировка',phrase:'На горе Арарат растёт крупный виноград.',
+    note:'Если «Р» горловая (картавость) — это не лень, а неправильная постановка. Логопед в 14 лет исправляет её за 1–3 месяца.'},
+  {id:'l',n:'Л',prep:[['Лопаточка','Широкий расслабленный язык лежит на нижней губе. 10 секунд × 3.'],['Индюк','Быстро води широким языком по верхней губе: «бл-бл-бл». 10 секунд.'],['Качели','Кончик языка вверх за верхние зубы, потом вниз за нижние. 15 раз.']],
+    syl:'ЛА-ЛО-ЛУ-ЛЫ · АЛ-ОЛ-УЛ-ЫЛ · ПЛА-КЛА-ГЛА-ФЛА',words:'лодка, стол, волна, голос, ложка, лампа, полка, мяч в углу, клуб, плечо',phrase:'Мила мыла мишку мылом, Мила мыло уронила.',note:'Звук «Л» твёрдый: кончик языка упирается в верхние зубы, а не лежит между ними.'},
+  {id:'sh',n:'Ш — С',prep:[['Чашечка','Широкий язык поднят чашечкой к верхним зубам. 10 секунд × 3.'],['Насос','Улыбка, зубы сомкнуты: «с-с-с» как насос, потом «ш-ш-ш» как змея. По 5 секунд, 5 раз.']],
+    syl:'СА-ША · СО-ШО · СУ-ШУ · СЫ-ШИ · АС-АШ · ОС-ОШ',words:'каша — касса, мышка — миска, шум — сум, крыша — крыса, шило — сила, шапка — сапоги',phrase:'Саша шапкой шишку сшиб.',note:'Если «С» свистит или язык виден между зубами (шепелявость) — к логопеду, это быстро исправляется.'},
+  {id:'zh',n:'Ж — З',prep:[['Жук','«Ж-ж-ж» 5 секунд, потом «з-з-з» 5 секунд. Чередовать 5 раз, звонко, с голосом.'],['Чашечка','Широкий язык поднят чашечкой. 10 секунд × 3.']],
+    syl:'ЖА-ЗА · ЖО-ЗО · ЖУ-ЗУ · АЖ-АЗ',words:'жук — зуб, жара — заря, кожа — коза, жир — зима, ножи — низы, жёлтый — зелёный',phrase:'У ежа ежата, у ужа ужата.',note:'«Ж» и «З» — звонкие: приложи ладонь к горлу, она должна чувствовать вибрацию.'},
+  {id:'ch',n:'Ч — Щ',prep:[['Паровоз','Ритмично «ч-ч-ч-ч» 10 секунд, как поезд трогается.'],['Чашечка','Широкий язык поднят чашечкой к верхним зубам. 10 секунд × 3.']],
+    syl:'ЧА-ЧО-ЧУ-ЧИ · ЩА-ЩО-ЩУ-ЩИ · АЧ-ОЧ-УЧ · АЩ-ОЩ-УЩ',words:'чай, часы, ключ, ночь, мяч, щука, щётка, овощи, плащ, роща',phrase:'Щёткой чищу я щенка, щекочу ему бока.',note:'«Щ» — долгий мягкий звук, не «шч» и не «ш».'},
+  {id:'end',n:'Окончания',prep:[['Слова целиком','Каждое слово договаривай до последней буквы. Особенно окончания: -ого, -ает, -ться.']],
+    syl:'здравствуйте (не «здрасьте») · сейчас (не «щас») · пожалуйста (не «пжлста») · тысяча (не «тыща») · сколько (не «скока») · только (не «тока») · говорит (не «грит») · вообще (не «ваще») · человек (не «чел»)',
+    words:'Прочитай по 3 раза, чётко выговаривая концы слов: «Я занимаюсь английским языком по вторникам и четвергам». «Мы готовились к контрольной по математике до позднего вечера». «Тренировка начинается в пять часов, приходи пораньше».',
+    phrase:'Проглоченные окончания — главная причина, почему речь звучит «неуверенно». Люди переспрашивают — а ты начинаешь волноваться.',note:'В компании друзей «щас» и «чел» — нормально. Но на уроке, на выступлении и в важном разговоре — полные слова.'}
+];
+function soundIdx(){ if(S.ui.sndDay!==todayKey()){ S.ui.snd=null; S.ui.sndDay=todayKey(); } const i = (S.ui.snd!=null) ? S.ui.snd : ((diffDays(parseKey(S.start),parseKey(todayKey()))%SOUNDS.length)+SOUNDS.length)%SOUNDS.length; return i; }
+const READ_TEXTS = [
+  {t:'Про зал',x:'В первый день в зале мне казалось, что все смотрят только на меня. Я долго выбирал, с какого тренажёра начать, и в итоге просто сел на велосипед. Потом подошёл тренер и показал, как правильно делать жим. Оказалось, что никто ни на кого не смотрит: каждый занят своим подходом. Через месяц я уже знал, какие веса брать, и записывал результаты. Самое приятное — видеть, как цифры растут каждую неделю.'},
+  {t:'Про озеро',x:'Прошлым летом мы ездили на озеро. Дорога заняла почти шесть часов, и половину пути мы слушали музыку и спорили, какой трек лучше. Вода была холодной, но мы всё равно купались каждый день. Вечером жарили на костре картошку, а один раз увидели настоящий звездопад. Я загадал желание и никому его не рассказал. Теперь, когда вижу фото с того озера, хочется вернуться туда ещё раз.'},
+  {t:'Про английский',x:'Раньше английский казался мне скучным: правила, таблицы, бесконечные слова. Всё изменилось, когда я начал смотреть видео без перевода. Сначала понимал только отдельные фразы, но через пару месяцев стал ловить шутки. Теперь на занятиях я стараюсь говорить больше, даже если ошибаюсь. Преподаватель говорит, что ошибка — это не провал, а шаг вперёд. Цель на этот год — спокойно поговорить с иностранцем минут десять.'}
+];
+const TOPICS = ['Как прошёл твой день','Почему ты начал ходить в зал','Лучший фильм или сериал, который ты посмотрел','Место, куда хочешь поехать, и почему','Что бы ты изменил в школе','Любимая еда и почему именно она','Игра, которая тебе нравится','Кем хочешь работать через 10 лет','Самая смешная история этого года','Что ты умеешь лучше других','Если бы у тебя был миллион','Лучший совет, который тебе давали','Спорт, который хочешь попробовать','Музыка, которую сейчас слушаешь','Зачем учить английский — объясни другу','Лето или зима — что лучше'];
+const QUESTIONS = ['Что ты сейчас смотришь или читаешь?','Какая песня у тебя сейчас на повторе?','Если бы можно было за день выучить любой навык — какой?','Куда бы ты поехал(а), если бы можно было прямо завтра?','Какой предмет в школе правда интересный?','Что ты любишь делать в выходные?','Какая еда — лучшая в мире?','Есть хобби, про которое мало кто знает?','Кем хочешь стать и почему?','Какое самое смешное видео ты видел(а) недавно?','Кошки или собаки — и почему?','Какой фильм можно пересматривать бесконечно?','Какими были бы каникулы мечты?','Какой спорт тебе нравится?','Лето или зима — и почему?','Если бы ты открыл(а) своё кафе — что там было бы?','Что тебя недавно удивило?','Какое приложение у тебя самое любимое?'];
+const PARASITES = 'ну, типа, короче, как бы, это самое, в общем, блин, э-э';
+
+let WU={on:false,i:0,left:0}, TWs={lv:'easy',i:0}, RD={i:0,on:false,t0:0,res:null}, PAR={ti:0,on:false,left:60,n:0,res:null}, Q={i:0,on:false,left:30};
+let spTimer=null;
+function spStop(){ if(spTimer){ clearInterval(spTimer); spTimer=null; } WU.on=false; RD.on=false; PAR.on=false; Q.on=false; }
+function beep(){ try{ const C=beep.ctx||(beep.ctx=new (window.AudioContext||window.webkitAudioContext)()); const o=C.createOscillator(), g=C.createGain(); o.frequency.value=880; g.gain.value=0.07; o.connect(g); g.connect(C.destination); o.start(); o.stop(C.currentTime+0.15); }catch(e){} try{ if(navigator.vibrate) navigator.vibrate(120); }catch(e){} }
+function spSessionsWeek(){ const t=parseKey(todayKey()); let n=0; for(let i=0;i<7;i++){ if(dayData(keyOf(addDays(t,-i))).d.speech) n++; } return n; }
+function markSpeech(){ const k=todayKey(); if(tasksFor(parseKey(k)).some(t=>t.id==='speech')){ const dd=ensureDay(k); if(!dd.d.speech){ dd.d.speech=true; save(); toast('Речь засчитана в распорядке'); } } }
+function wordsIn(x){ return x.split(/\s+/).filter(w=>/[а-яёa-z0-9]/i.test(w)).length; }
+function mmss(s){ return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+
+function wuHTML(){
+  if(!WU.on){
+    const total=WARMUP.reduce((a,b)=>a+b.s,0);
+    return `<div class="section-head"><h3>1. Разминка артикуляции</h3><span class="small muted num">${mmss(total)}</span></div>
+      <p class="small muted">Каждый раз перед скороговорками. Таймер сам переключает упражнения и подаёт сигнал.</p>
+      <ol class="clean small">${WARMUP.map(w=>`<li><b>${w.n}</b> · ${w.s} с</li>`).join('')}</ol>
+      <div class="btnrow"><button class="btn primary" data-act="sp-wu-start">Начать разминку</button></div>`;
+  }
+  const w=WARMUP[WU.i], pct=Math.round((1-WU.left/w.s)*100);
+  return `<div class="section-head"><h3>Разминка</h3><span class="small muted num">шаг ${WU.i+1} из ${WARMUP.length}</span></div>
+    <div class="sp-now"><div class="sp-name">${w.n}</div><div class="sp-count num">${WU.left}</div></div>
+    <div class="sp-bar"><i style="width:${pct}%"></i></div>
+    <p>${w.d}</p>
+    <div class="btnrow"><button class="btn" data-act="sp-wu-skip">Дальше</button><button class="btn" data-act="sp-stop">Стоп</button></div>`;
+}
+function twHTML(){
+  const L=TWISTERS[TWs.lv], i=TWs.i%L.length, id=TWs.lv+i, cnt=(S.speech.tw[id]||0);
+  return `<div class="section-head"><h3>3. Скороговорки</h3><span class="small muted">по 2 в день</span></div>
+    <div class="chips" role="tablist" style="margin-inline:0;padding-inline:0">${TW_LEVELS.map(([k,n])=>`<button role="tab" data-act="sp-tw-lv" data-v="${k}" aria-pressed="${k===TWs.lv}">${n}</button>`).join('')}</div>
+    <blockquote class="sp-tw">${esc(L[i])}</blockquote>
+    <p class="small muted">3 раза медленно по слогам → 3 раза в обычном темпе → 3 раза быстро. Потом 1 раз с чистой ручкой, зажатой в зубах, и сразу без неё — речь станет заметно чётче.</p>
+    <div class="btnrow"><button class="btn primary" data-act="sp-tw-ok">Получилось чисто${cnt?' · '+cnt:''}</button><button class="btn" data-act="sp-tw-next">Другая</button></div>`;
+}
+function rdHTML(){
+  const T=READ_TEXTS[RD.i], wc=wordsIn(T.x);
+  let res='';
+  if(RD.res){ const w=RD.res; const msg = w<100?'Медленно — можно чуть живее.':(w<=160?'Отличный темп — так приятно слушать.':'Быстро — замедлись и делай паузы на точках.'); res=`<div class="note ${w>=100&&w<=160?'ok':''}"><b class="num">${w} слов в минуту.</b> ${msg}</div>`; }
+  const hist=(S.speech.wpm||[]).slice(-5).map(r=>r.w).join(' · ');
+  return `<div class="section-head"><h3>5. Темп речи</h3><span class="small muted">норма 110–160 слов/мин</span></div>
+    <div class="chips" role="tablist" style="margin-inline:0;padding-inline:0">${READ_TEXTS.map((t,k)=>`<button role="tab" data-act="sp-rd-text" data-v="${k}" aria-pressed="${k===RD.i}">${t.t}</button>`).join('')}</div>
+    <p class="small muted">Нажми «Старт», прочитай текст вслух, как будто рассказываешь другу, и нажми «Стоп».</p>
+    <div class="sp-text">${esc(T.x)}</div>
+    <div class="btnrow"><button class="btn ${RD.on?'danger':'primary'}" data-act="sp-rd-toggle">${RD.on?'Стоп':'Старт'}</button><span class="small muted num" style="align-self:center">${wc} слов</span></div>
+    ${res}${hist?`<p class="small muted num">Последние результаты: ${hist}</p>`:''}`;
+}
+function parHTML(){
+  const topic=TOPICS[PAR.ti%TOPICS.length];
+  let body;
+  if(PAR.on) body=`<div class="sp-now"><div class="sp-name">Говори!</div><div class="sp-count num">${PAR.left}</div></div>
+      <div class="btnrow"><button class="btn primary sp-plus" data-act="sp-par-plus">+1 паразит · ${PAR.n}</button><button class="btn" data-act="sp-stop">Стоп</button></div>`;
+  else {
+    let res='';
+    if(PAR.res!=null){ const n=PAR.res; res=`<div class="note ${n<=2?'ok':''}"><b class="num">${n} ${n===1?'паразит':(n>=2&&n<=4?'паразита':'паразитов')} за минуту.</b> ${n<=2?'Отлично — говоришь уверенно.':(n<=6?'Нормально. Вместо «ну» и «типа» — просто пауза.':'Потренируй ещё: пауза звучит увереннее, чем «э-э».')}</div>`; }
+    body=`<div class="btnrow"><button class="btn primary" data-act="sp-par-start">Старт · 60 секунд</button><button class="btn" data-act="sp-par-topic">Другая тема</button></div>${res}`;
+  }
+  return `<div class="section-head"><h3>4. Минута без паразитов</h3><span class="small muted">1 минута</span></div>
+    <p class="small muted">Говори минуту на тему без «${PARASITES}». Попроси кого-то из семьи нажимать «+1» на каждое такое слово или считай сам.</p>
+    <blockquote class="sp-tw">${esc(topic)}</blockquote>${body}`;
+}
+function qHTML(){
+  const q=QUESTIONS[Q.i%QUESTIONS.length];
+  return `<div class="section-head"><h3>6. Разговор: ответ + вопрос</h3><span class="small muted">30 секунд</span></div>
+    <p class="small muted">Ответь вслух на вопрос за 30 секунд, а потом придумай 2 вопроса в ответ. Так разговор никогда не обрывается.</p>
+    <blockquote class="sp-tw">${esc(q)}</blockquote>
+    ${Q.on?`<div class="sp-now"><div class="sp-name">Отвечай</div><div class="sp-count num">${Q.left}</div></div>`:''}
+    <div class="btnrow">${Q.on?'<button class="btn" data-act="sp-stop">Стоп</button>':'<button class="btn primary" data-act="sp-q-start">Старт · 30 секунд</button>'}<button class="btn" data-act="sp-q-next">Другой вопрос</button></div>`;
+}
+function sndHTML(){
+  const i=soundIdx(), x=SOUNDS[i], cnt=(S.speech.snd&&S.speech.snd[x.id])||0;
+  return `<div class="section-head"><h3>2. Звук дня</h3><span class="small muted">3–4 минуты</span></div>
+    <div class="chips" role="tablist" style="margin-inline:0;padding-inline:0">${SOUNDS.map((z,k)=>`<button role="tab" data-act="sp-snd" data-v="${k}" aria-pressed="${k===i}">${z.n}</button>`).join('')}</div>
+    <div class="ex" style="border-top:none;padding-top:0"><div class="n">а</div><div><div class="nm">Подготовка</div>${x.prep.map(p=>`<div class="cue"><b>${p[0]}.</b> ${p[1]}</div>`).join('')}</div></div>
+    <div class="ex"><div class="n">б</div><div><div class="nm">${x.id==='end'?'Как правильно':'Слоги'}</div><div class="cue" style="color:var(--ink);font-size:14px">${esc(x.syl)}</div><div class="cue">${x.id==='end'?'Произнеси каждое слово полностью 3 раза.':'Каждую цепочку 3 раза: медленно, в обычном темпе, быстро.'}</div></div></div>
+    <div class="ex"><div class="n">в</div><div><div class="nm">${x.id==='end'?'Фразы':'Слова'}</div><div class="cue" style="color:var(--ink);font-size:14px">${esc(x.words)}</div></div></div>
+    <blockquote class="sp-tw">${esc(x.phrase)}</blockquote>
+    <p class="small muted">${esc(x.note)}</p>
+    <div class="btnrow"><button class="btn primary" data-act="sp-snd-ok">Отработал${cnt?' · '+cnt:''}</button></div>`;
+}
+function spRefresh(id){ const el=document.getElementById(id); if(!el) return; el.innerHTML=({'sp-snd':sndHTML,'sp-wu':wuHTML,'sp-tw':twHTML,'sp-rd':rdHTML,'sp-par':parHTML,'sp-q':qHTML})[id](); }
+function renderSpeech(){
+  const el=$('#tab-speech'); const n=spSessionsWeek();
+  el.innerHTML = `
+  <div class="top"><div><div class="eyebrow">Тренажёр · 12 минут в день</div><h1>Дикция и речь</h1></div><div class="stat" style="text-align:right"><div class="v num" style="font-family:var(--font-d);font-size:20px;font-weight:700">${n}/6</div><div class="k small muted">занятий за неделю</div></div></div>
+  <p>Чёткая дикция и спокойный голос — это то, что сразу слышат учитель, тренер, друзья и девочка, которая нравится. Каждый день по порядку: разминка → звук дня → 2 скороговорки → минута без паразитов. Темп и разговор — 2–3 раза в неделю.</p>
+  <div class="eyebrow" style="margin-top:4px">Дикция · чёткость звуков</div>
+  <div class="card" id="sp-wu">${wuHTML()}</div>
+  <div class="card" id="sp-snd">${sndHTML()}</div>
+  <div class="card" id="sp-tw">${twHTML()}</div>
+  <div class="card">
+    <h3>5 приёмов для чёткой дикции</h3>
+    <p class="small muted">Бери любой текст из блока «Темп речи» ниже. Один приём в день, по кругу.</p>
+    <dl class="kv">
+      <dt>Шёпотом</dt><dd>Прочитай текст громким шёпотом так, чтобы было слышно в другом конце комнаты. Без голоса работают только губы и язык — согласные становятся чёткими.</dd>
+      <dt>С ручкой</dt><dd>Зажми зубами чистую ручку поперёк, прочитай абзац, стараясь, чтобы было понятно. Сразу же — без ручки. Разница слышна с первого раза.</dd>
+      <dt>Одни согласные</dt><dd>Читай предложение, произнося только согласные и пропуская гласные. Язык и губы работают на пределе.</dd>
+      <dt>Как через стекло</dt><dd>Читай, преувеличенно открывая рот, как будто тебя слышат через окно и понимают только по губам.</dd>
+      <dt>Слоги с хлопком</dt><dd>Каждый слог — хлопок в ладоши. Сначала медленно, потом всё быстрее, пока не станет обычной речью.</dd>
+    </dl>
+  </div>
+  <div class="eyebrow" style="margin-top:4px">Речь · уверенность в разговоре</div>
+  <div class="card" id="sp-par">${parHTML()}</div>
+  <div class="card" id="sp-rd">${rdHTML()}</div>
+  <div class="card" id="sp-q">${qHTML()}</div>
+  <div class="card">
+    <h3>Как вести разговор</h3>
+    <dl class="kv">
+      <dt>Открытые вопросы</dt><dd>Не «Тебе нравится музыка?» (ответ «да» — и тишина), а «Что ты сейчас слушаешь?».</dd>
+      <dt>Ответ + вопрос</dt><dd>Ответил — спроси то же самое у собеседника: «А ты?»</dd>
+      <dt>Зацепки</dt><dd>Лови детали: «Я была в Алматы» → «О, а что там понравилось больше всего?»</dd>
+      <dt>Слушай</dt><dd>Не перебивай и не жди своей очереди — реагируй на то, что услышал.</dd>
+      <dt>Истории</dt><dd>Коротко, 30–60 секунд: что было → что случилось → чем закончилось.</dd>
+      <dt>Юмор</dt><dd>Без подколов и унижений. Посмеяться над собой — можно.</dd>
+      <dt>Как закончить</dt><dd>Тоже навык: «Ладно, мне на английский. Потом расскажешь, чем закончилось!»</dd>
+    </dl>
+  </div>
+  <div class="card soft">
+    <h3>Голос</h3>
+    <ul class="clean">
+      <li>Говори на выдохе и чуть медленнее обычного — голос звучит ниже и спокойнее.</li>
+      <li>Раз в неделю запиши голосовое на 1 минуту о своём дне и послушай: темп, паразиты, чёткость. Сравни с первой записью через месяц.</li>
+      <li>Голос сейчас ломается — это нормально. Не кричи и не пытайся специально басить, пей воду.</li>
+    </ul>
+  </div>
+  <div class="note ok">Лучший тренажёр — живые разговоры: с семьёй за ужином, с друзьями, на английском, в магазине. С девочкой, которая нравится, работают те же правила: будь собой, спрашивай про её интересы, слушай ответы и уважай их. Уверенность приходит от практики со всеми людьми, а не только в важных разговорах.</div>`;
+}
+function speechAct(act,v){
+  if(act==='sp-stop'){ spStop(); ['sp-wu','sp-par','sp-q','sp-rd'].forEach(spRefresh); return; }
+  if(act==='sp-wu-start'){ spStop(); WU={on:true,i:0,left:WARMUP[0].s}; beep(); spRefresh('sp-wu');
+    spTimer=setInterval(()=>{ WU.left--; if(WU.left<=0){ WU.i++; beep(); if(WU.i>=WARMUP.length){ spStop(); spRefresh('sp-wu'); markSpeech(); toast('Разминка готова — теперь скороговорки'); return; } WU.left=WARMUP[WU.i].s; } spRefresh('sp-wu'); },1000); return; }
+  if(act==='sp-wu-skip'){ WU.i++; if(WU.i>=WARMUP.length){ spStop(); spRefresh('sp-wu'); markSpeech(); return; } WU.left=WARMUP[WU.i].s; beep(); spRefresh('sp-wu'); return; }
+  if(act==='sp-snd'){ S.ui.snd=+v; save(); spRefresh('sp-snd'); return; }
+  if(act==='sp-snd-ok'){ const x=SOUNDS[soundIdx()]; S.speech.snd=S.speech.snd||{}; S.speech.snd[x.id]=(S.speech.snd[x.id]||0)+1; save(); toast('Засчитано'); spRefresh('sp-snd'); return; }
+  if(act==='sp-tw-lv'){ TWs={lv:v,i:0}; spRefresh('sp-tw'); return; }
+  if(act==='sp-tw-next'){ TWs.i++; spRefresh('sp-tw'); return; }
+  if(act==='sp-tw-ok'){ const L=TWISTERS[TWs.lv], id=TWs.lv+(TWs.i%L.length); S.speech.tw[id]=(S.speech.tw[id]||0)+1; save(); toast('Засчитано'); spRefresh('sp-tw'); return; }
+  if(act==='sp-rd-text'){ if(RD.on) return; RD={i:+v,on:false,t0:0,res:null}; spRefresh('sp-rd'); return; }
+  if(act==='sp-rd-toggle'){
+    if(!RD.on){ RD.on=true; RD.res=null; RD.t0=Date.now(); spRefresh('sp-rd'); return; }
+    const sec=(Date.now()-RD.t0)/1000; RD.on=false;
+    if(sec<8){ toast('Слишком быстро — прочитай весь текст вслух'); spRefresh('sp-rd'); return; }
+    RD.res=Math.round(wordsIn(READ_TEXTS[RD.i].x)/(sec/60)); S.speech.wpm=(S.speech.wpm||[]).concat([{d:todayKey(),w:RD.res}]).slice(-20); save(); spRefresh('sp-rd'); return; }
+  if(act==='sp-par-topic'){ PAR.ti=Math.floor(Math.random()*TOPICS.length); PAR.res=null; spRefresh('sp-par'); return; }
+  if(act==='sp-par-start'){ spStop(); PAR.on=true; PAR.left=60; PAR.n=0; PAR.res=null; beep(); spRefresh('sp-par');
+    spTimer=setInterval(()=>{ PAR.left--; if(PAR.left<=0){ PAR.res=PAR.n; S.speech.par=(S.speech.par||[]).concat([{d:todayKey(),n:PAR.n}]).slice(-20); save(); spStop(); beep(); spRefresh('sp-par'); markSpeech(); return; } spRefresh('sp-par'); },1000); return; }
+  if(act==='sp-par-plus'){ if(PAR.on){ PAR.n++; spRefresh('sp-par'); } return; }
+  if(act==='sp-q-next'){ Q.i=Math.floor(Math.random()*QUESTIONS.length); spRefresh('sp-q'); return; }
+  if(act==='sp-q-start'){ spStop(); Q.on=true; Q.left=30; beep(); spRefresh('sp-q');
+    spTimer=setInterval(()=>{ Q.left--; if(Q.left<=0){ spStop(); beep(); toast('Теперь 2 вопроса в ответ'); spRefresh('sp-q'); return; } spRefresh('sp-q'); },1000); return; }
+}
+
+/* ================= НАВИГАЦИЯ И СОБЫТИЯ ================= */
+const TABS=['today','plan','speech','food','progress','remind'];
+function show(tab){
+  if(!TABS.includes(tab)) tab='today';
+  S.ui.tab=tab; save();
+  TABS.forEach(t=>{ $('#tab-'+t).hidden = t!==tab; });
+  document.querySelectorAll('.tabbar button').forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
+  if(tab!=='speech') spStop();
+  ({today:renderToday,plan:renderPlan,speech:renderSpeech,food:renderFood,progress:renderProgress,remind:renderRemind})[tab]();
+}
+document.addEventListener('click',e=>{
+  const tb=e.target.closest('.tabbar button'); if(tb){ if(tb.dataset.tab==='today') viewDate=parseKey(todayKey()); show(tb.dataset.tab); window.scrollTo(0,0); return; }
+  const a=e.target.closest('[data-act]'); if(!a) return;
+  const act=a.dataset.act, v=a.dataset.v;
+  if(act.indexOf('sp-')===0){ speechAct(act,v); return; }
+  if(act==='toggle'){ const k=keyOf(viewDate); const dd=ensureDay(k); dd.d[v]=!dd.d[v]; if(!dd.d[v]) delete dd.d[v]; save(); const y=window.scrollY; renderToday(); window.scrollTo(0,y); const sc=scoreFor(viewDate); if(dd.d[v] && sc.pct>=80 && sc.pct-Math.round(1/sc.total*100)<80) toast('80% — день засчитан, серия растёт'); }
+  else if(act==='chswap'){
+    const k=keyOf(viewDate), dd=ensureDay(k), cur=challengeIdx(viewDate), we=viewDate.getDay()===0||viewDate.getDay()===6;
+    let n=cur, guard=0; while((n===cur || (we && SCHOOL_CH.includes(n)) || (S.chSkip||[]).includes(n)) && guard<100){ n=Math.floor(Math.random()*CHALLENGES.length); guard++; }
+    dd.ch=n; save(); const y=window.scrollY; renderToday(); window.scrollTo(0,y); toast('Новый челлендж на сегодня');
+  }
+  else if(act==='water'){ const k=keyOf(viewDate); const dd=ensureDay(k); const n=+v; dd.w = (dd.w===n)? n-1 : n; save(); const y=window.scrollY; renderToday(); window.scrollTo(0,y); }
+  else if(act==='back'){ viewDate=parseKey(todayKey()); show('today'); window.scrollTo(0,0); }
+  else if(act==='day'){ const n=+v; viewDate = n===0? parseKey(todayKey()) : addDays(viewDate,n); renderToday(); }
+  else if(act==='go'){ if(v==='speech'||v==='remind'){ show(v); } else if(v==='food'){ S.ui.menu=DOW_KEYS[viewDate.getDay()]; show('food'); } else if(v==='progress'){ show('progress'); } else { S.ui.plan=v; show('plan'); } window.scrollTo(0,0); }
+  else if(act==='plan'){ S.ui.plan=v; save(); renderPlan(); }
+  else if(act==='gymday'){ S.ui.gymDay=+v; save(); const y=window.scrollY; renderPlan(); window.scrollTo(0,y); }
+  else if(act==='gymadd'){ const L=gymList(+v); L.push({id:'g'+v+'_'+Date.now(),nm:'Новое упражнение',last:''}); save(); const y=window.scrollY; renderPlan(); window.scrollTo(0,y); }
+  else if(act==='gymdel'){ const [d,id]=v.split(':'); S.gym[d]=gymList(+d).filter(e=>e.id!==id); save(); const y=window.scrollY; renderPlan(); window.scrollTo(0,y); }
+  else if(act==='menu'){ S.ui.menu=v; save(); const y=window.scrollY; renderFood(); window.scrollTo(0,y); }
+  else if(act==='shopreset'){ S.shop={}; save(); const y=window.scrollY; renderFood(); window.scrollTo(0,y); toast('Отметки сброшены'); }
+  else if(act==='wa'){ const txt = v==='week'? weekReport() : dayReport(viewDate); a.href = waHref(txt); }
+  else if(act==='copy'){ copyText(v==='week'? weekReport() : dayReport(viewDate)); }
+  else if(act==='gcal'){ S.remind[v]=true; save(); setTimeout(renderRemind,300); }
+  else if(act==='unrem'){ delete S.remind[v]; save(); renderRemind(); }
+  else if(act==='mdel'){ if(delArm===v){ S.measures=S.measures.filter(m=>m.id!==v); delArm=null; save(); toast('Замер удалён'); } else delArm=v; renderProgress(); }
+  else if(act==='backup'){ try{ copyText(btoa(unescape(encodeURIComponent(JSON.stringify(S))))); }catch(err){ toast('Не получилось создать код'); } }
+  else if(act==='restore'){
+    const code=($('#backup-in').value||'').trim(); if(!code){ toast('Сначала вставь код'); return; }
+    if(!restoreArm){ restoreArm=true; const val=code; renderProgress(); $('#backup-in').value=val; return; }
+    try{ const data=JSON.parse(decodeURIComponent(escape(atob(code)))); if(!data||typeof data!=='object'||!data.days) throw 0; S=Object.assign({},DEFAULT,data); S.ui=Object.assign({},DEFAULT.ui,data.ui||{}); save(); restoreArm=false; toast('Данные восстановлены'); renderProgress(); }
+    catch(err){ restoreArm=false; renderProgress(); toast('Код не подошёл — проверь, что скопирован целиком'); }
+  }
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset && (t.dataset.gname||t.dataset.glast)){ const [d,id]=(t.dataset.gname||t.dataset.glast).split(':'); const e=gymList(+d).find(x=>x.id===id); if(e){ if(t.dataset.gname) e.nm=t.value; else e.last=t.value; save(); } }
+  else if(t.id==='g-dad'||t.id==='g-mom'){ S[t.id==='g-dad'?'dad':'mom']=t.value; save(); calcGenetic(); }
+  else if(t.id==='s-name'){ S.name=t.value.slice(0,30); save(); }
+  else if(t.id==='s-phone'){ S.phone=t.value.slice(0,20); save(); }
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset && t.dataset.shop){ if(t.checked) S.shop[t.dataset.shop]=1; else delete S.shop[t.dataset.shop]; save(); t.closest('label').classList.toggle('got',t.checked); }
+  else if(t.id==='s-start' && t.value){ S.start=t.value; save(); toast('Дата старта изменена'); }
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='mform') return; e.preventDefault();
+  const w=parseFloat(($('#m-weight').value||'').replace(',','.')); if(!(w>0)){ toast('Укажи вес'); return; }
+  const h=parseFloat(($('#m-height').value||'').replace(',','.')); const p=$('#m-pull').value;
+  const date=$('#m-date').value||todayKey();
+  S.measures=S.measures.filter(m=>m.date!==date);
+  S.measures.push({id:'m'+Date.now(),date,weight:w,height:h>0?h:null,pull:p===''?null:+p});
+  save(); toast('Замер сохранён'); renderProgress();
+});
+
+/* ================= СТАРТ ================= */
+load();
+if(!storageOK) $('#storeWarn').hidden=false;
+const h=(location.hash||'').replace('#','');
+show(TABS.includes(h)?h:'today');
+setInterval(()=>{ if(S.ui.tab==='today' && !document.hidden && document.activeElement.tagName!=='INPUT'){ const y=window.scrollY; renderToday(); window.scrollTo(0,y);} },60000);
+})();
+</script>
+<script>
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }); }
+</script>
+</body>
+</html>
