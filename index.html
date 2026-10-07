@@ -329,6 +329,18 @@ const REMINDERS = [
   {id:'r11',t:'Недельный отчёт',time:'20:30',dur:60,days:['SU'],d:'Приложение → «Прогресс» → «Отчёт за неделю».'},
   {id:'r12',t:'Стрижка у барбера',time:'11:15',dur:60,days:['SA'],interval:4,d:'После английского, раз в 4 недели. Фото стрижки с собой.'}
 ];
+const ALARMS = [
+  {id:'a1',time:'06:50',days:'пн–пт',t:'Подъём'},
+  {id:'a2',time:'08:00',days:'сб',t:'Подъём — английский в 9:00'},
+  {id:'a3',time:'08:30',days:'вс',t:'Подъём'},
+  {id:'a4',time:'16:00',days:'пн, ср, пт',t:'Перекус и сумка в зал'},
+  {id:'a5',time:'16:15',days:'вт, чт',t:'Перекус перед английским'},
+  {id:'a6',time:'20:15',days:'пн–сб',t:'Дикция 12 минут'},
+  {id:'a7',time:'21:15',days:'каждый день',t:'Второй ужин'},
+  {id:'a8',time:'21:40',days:'каждый день',t:'Рост и спина 7 минут'},
+  {id:'a9',time:'22:00',days:'каждый день',t:'Уход, зубы, телефон на зарядку'},
+  {id:'a10',time:'22:30',days:'каждый день',t:'Отбой'}
+];
 const DAYCODE = {SU:0,MO:1,TU:2,WE:3,TH:4,FR:5,SA:6};
 const DAYNAME_SHORT = {MO:'пн',TU:'вт',WE:'ср',TH:'чт',FR:'пт',SA:'сб',SU:'вс'};
 
@@ -1379,9 +1391,20 @@ function daysLabel(r){
 function renderRemind(){
   const el=$('#tab-remind'); const added=REMINDERS.filter(r=>S.remind[r.id]).length;
   el.innerHTML = `
-  <div class="top"><div><div class="eyebrow">Redmi · Google Календарь</div><h1>Напоминания</h1></div><button class="btn sm" data-act="back">← Назад</button></div>
-  <p>Приложение не может само присылать уведомления, когда закрыто, поэтому ставим их в Google Календарь. Каждое напоминание ставится <b>ровно на 3 недели вперёд</b>${S.remindUntil?` — до ${fmtDate(parseKey(S.remindUntil))}`:''}. Через 3 недели приложение само предложит продлить, а время отбоя подстроится под новую неделю.</p>
-  <div class="card" style="border-color:var(--accent)">
+  <div class="top"><div><div class="eyebrow">Будильники и календарь</div><h1>Напоминания</h1></div><button class="btn sm" data-act="back">← Назад</button></div>
+  <p>Приложение не может само присылать уведомления, когда закрыто, поэтому ставим их в Google Календарь. Каждое напоминание ставится <b>ровно на 3 недели вперёд</b>${S.remindUntil?` — до ${fmtDate(parseKey(S.remindUntil))}`:''}. Через 3 недели приложение само предложит продлить. А главные — подъём, зал, растяжку и отбой — лучше поставить будильниками.</p>
+  <div class="card" style="border-color:var(--accent);background:var(--accent-soft)">
+    <div class="section-head"><h3>Будильники</h3><span class="small muted num">поставлено ${ALARMS.filter(a=>S.alarms&&S.alarms[a.id]).length} из ${ALARMS.length}</span></div>
+    <p class="small">Звонят как настоящий будильник, пока не выключишь. Сайт не может сам создать будильник в телефоне, поэтому ставим их один раз вручную в приложении <b>«Часы»</b> — 5 минут, и они работают всегда, без продления.</p>
+    <ol class="clean small">
+      <li>Открой <b>«Часы»</b> → вкладка <b>«Будильник»</b> → <b>«+»</b>.</li>
+      <li>Выставь время → <b>«Повтор»</b> → <b>«Выбрать дни»</b> (или «Свои») → отметь дни из списка ниже.</li>
+      <li>В поле <b>«Название»</b> (или «Метка») впиши текст из списка → <b>«Сохранить»</b>. Отметь здесь галочкой.</li>
+    </ol>
+    <div class="shop">${ALARMS.map(a=>{const on=!!(S.alarms&&S.alarms[a.id]); return `<label class="${on?'got':''}" for="al-${a.id}"><input type="checkbox" id="al-${a.id}" data-alarm="${a.id}" ${on?'checked':''}><span><b class="num">${a.time}</b> · ${a.days} — ${esc(a.t)}</span></label>`;}).join('')}</div>
+    <p class="small muted">Перекус в школе в 10:00 лучше оставить уведомлением из календаря — будильник на уроке не нужен. Проверь, что громкость будильника на телефоне не на нуле.</p>
+  </div>
+  <div class="card">
     <h3>Быстро: все напоминания одним файлом</h3>
     <p class="small">Один файл — все ${REMINDERS.length} напоминаний на 3 недели, отбой — в 22:30.</p>
     ${IN_FRAME?'<p class="small muted">Скачивание работает в установленном приложении (ссылка с GitHub). Здесь — добавляй по одному ниже.</p>':'<div class="btnrow"><button class="btn primary" data-act="icsdl">Скачать файл на 3 недели</button></div>'}
@@ -1397,7 +1420,7 @@ function renderRemind(){
       <li>Нажимай «Добавить в календарь» у каждого пункта ниже → откроется Google Календарь с готовым событием → «Сохранить».</li>
       <li>Проверь строку «Повторять»: там должно быть «до» и дата через 3 недели. Если повтор не встал сам — выбери «Каждую неделю», отметь дни под названием напоминания и окончание через 3 недели.</li>
       <li>Чтобы MIUI не глушил уведомления: Настройки → Приложения → Календарь → Контроль активности (Экономия заряда) → «Нет ограничений». Там же проверь, что уведомления включены.</li>
-      <li>Подъём и отбой надёжнее поставить будильником в приложении «Часы».</li>
+      <li>Чтобы уведомления календаря были громче: Настройки → Уведомления → Google Календарь → «Уведомления о мероприятиях» → выбери громкую мелодию, включи «Всплывающие уведомления» и «На экране блокировки».</li>
       <li>Чтобы приложение было под рукой: в Chrome ⋮ → «Добавить на главный экран».</li>
     </ol>
   </div>
@@ -1419,19 +1442,7 @@ function renderRemind(){
     </div>`).join('')}
   </div>
   <p class="small muted">Если ссылка открылась в браузере, а не в приложении Календарь, — войди в тот же Google-аккаунт, что на телефоне, и нажми «Сохранить». Событие появится в Календаре на телефоне.</p>
-  <div class="card soft">
-    <h3>Если календарь не открывается</h3>
-    <p class="small">Поставь главные напоминания будильниками в приложении «Часы» → «+» → время → «Повтор» → дни → в «Название» впиши текст:</p>
-    <ul class="clean small">
-      <li><b>06:50</b> пн–пт — Подъём</li>
-      <li><b>10:00</b> пн–пт — Перекус в школе</li>
-      <li><b>16:00</b> пн, ср, пт — Перекус и сумка в зал</li>
-      <li><b>16:15</b> вт, чт — Перекус перед английским</li>
-      <li><b>20:15</b> пн–сб — Дикция 12 минут</li>
-      <li><b>21:15</b> каждый день — Второй ужин</li>
-      <li><b>21:45</b> каждый день — Уход, зубы, телефон на зарядку</li>
-    </ul>
-  </div>`;
+`;
 }
 
 /* ================= РЕЧЬ ================= */
@@ -1687,6 +1698,7 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('change',e=>{
   const t=e.target;
+  if(t.dataset && t.dataset.alarm){ S.alarms=S.alarms||{}; if(t.checked) S.alarms[t.dataset.alarm]=1; else delete S.alarms[t.dataset.alarm]; save(); renderRemind(); return; }
   if(t.dataset && t.dataset.shop){ if(t.checked) S.shop[t.dataset.shop]=1; else delete S.shop[t.dataset.shop]; save(); t.closest('label').classList.toggle('got',t.checked); }
   else if(t.id==='s-start' && t.value){ S.start=t.value; save(); toast('Дата старта изменена'); }
 });
