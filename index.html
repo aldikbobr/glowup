@@ -322,8 +322,9 @@ const REMINDERS = [
   {id:'r14',t:'Осанка и пресс',time:'17:30',dur:60,days:['SA'],d:'12 минут осанка + 8 минут пресс.'},
   {id:'r15',t:'Дикция и речь',time:'20:15',dur:60,days:['MO','TU','WE','TH','FR','SA'],d:'Разминка → звук дня → 2 скороговорки → минута без паразитов. Вкладка «Дикция».'},
   {id:'r7',t:'Второй ужин',time:'21:15',dur:60,days:'DAILY',d:'Творог или кефир — белок на ночь.'},
-  {id:'r8',t:'Уход, зубы, телефон на зарядку',time:'21:45',dur:60,days:'DAILY',d:'Ногти: не грыз? Пенка → крем. Зубы Clinica 2 минуты + нить. Телефон не у кровати.',late:true},
-  {id:'r9',t:'Отбой',time:'22:15',dur:60,days:'DAILY',d:'Цель — 8,5 часов сна. В пятницу и субботу можно до 22:45.',alarm:true,late:true},
+  {id:'r16',t:'Рост и спина: 7 минут',time:'21:25',dur:60,days:'DAILY',bed:-50,d:'Вис, струна, кобра, поза ребёнка, кошка, наклон, у стены. «План» → «Рост».',late:true},
+  {id:'r8',t:'Уход, зубы, телефон на зарядку',time:'21:45',bed:-30,dur:60,days:'DAILY',d:'Ногти: не грыз? Пенка → крем. Зубы Clinica 2 минуты + нить. Телефон не у кровати.',late:true},
+  {id:'r9',t:'Отбой',time:'22:15',bed:0,dur:60,days:'DAILY',d:'Цель — 8,5 часов сна. В пятницу и субботу можно до 22:45.',alarm:true,late:true},
   {id:'r10',t:'Замеры и фото',time:'08:35',dur:60,days:['SU'],d:'Вес натощак, рост у стены, фото в одном месте и свете.'},
   {id:'r11',t:'Недельный отчёт',time:'20:30',dur:60,days:['SU'],d:'Приложение → «Прогресс» → «Отчёт за неделю».'},
   {id:'r12',t:'Стрижка у барбера',time:'11:15',dur:60,days:['SA'],interval:4,d:'После английского, раз в 4 недели. Фото стрижки с собой.'}
@@ -361,6 +362,8 @@ function load(){
   if(!S.mom) S.mom='166';
   if(!S.gym) S.gym={};
   if(!S.speech) S.speech={tw:{},wpm:[],par:[]};
+  if(S.remindHide===true) S.remindHide='none';
+  setTimeout(remCheckExpired,0);
   if(!raw) save();
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOK=false; document.getElementById('storeWarn').hidden=false; } }
@@ -409,6 +412,7 @@ function tasksFor(date){
   const sleepNote = w<3 ? 'Переход к режиму: неделя '+(w+1)+' из 3. Каждую неделю — на 30 минут раньше' : 'Цель — 8,5 часов сна';
   const evening = (pillow)=>{
     add('supper',mt[5],'food','Второй ужин',menu[5].name,'food');
+    add('grow',fmtMin(bed-50),'sport','Рост и спина: 7 минут','Вис, струна, кобра, поза ребёнка, кошка, наклон, у стены','grow');
     add('nails',fmtMin(bed-35),'care','Ногти: сегодня не грыз','Отметь, если весь день не грыз. Масло на кутикулу','hygiene');
     add('pm_skin',fmtMin(bed-30),'care','Вечерний уход и зубы','Пенка Centella → крем. Зубы пастой Clinica 2 минуты + нить, не полоскать'+(pillow?'. Сменить наволочку':''),'skin');
     add('phone',fmtMin(bed-20),'sleep','Телефон на зарядку не у кровати','Будильник поставить заранее');
@@ -434,7 +438,6 @@ function tasksFor(date){
       add('dinner',mt[4],'food','Ужин',menu[4].name,'food');
       add('shower','19:30','care','Душ','');
     }
-    add('challenge','20:00','mind','Челлендж дня',ch,'mind');
     add('speech','20:15','mind','Дикция и речь: 12 минут','Разминка → звук дня → 2 скороговорки → минута без паразитов','speech');
     evening(dow===3);
   } else if(dow===6){
@@ -450,7 +453,6 @@ function tasksFor(date){
     add('core','17:30','sport','Осанка + пресс, 20 минут','12 минут осанка, 8 минут пресс','posture');
     add('shower','18:30','care','Душ','');
     add('dinner',mt[4],'food','Ужин',menu[4].name,'food');
-    add('challenge','20:00','mind','Челлендж дня',ch,'mind');
     add('speech','20:15','mind','Дикция и речь: 12 минут','Разминка → звук дня → 2 скороговорки → минута без паразитов','speech');
     evening(false);
   } else {
@@ -464,7 +466,6 @@ function tasksFor(date){
     add('snack2',mt[3],'food','Перекус',menu[3].name,'food');
     add('prep','18:00','style','Подготовка к неделе','Подстричь и подпилить ногти, горький лак. Одежда на 5 дней, форма в зал, кроссовки, наволочка и простыня','style');
     add('dinner',mt[4],'food','Ужин',menu[4].name,'food');
-    add('challenge','20:00','mind','Челлендж дня',ch,'mind');
     add('report','20:30','prog','Отправить недельный отчёт','Вкладка «Прогресс» → «Отчёт за неделю»','progress');
     evening(false);
   }
@@ -526,14 +527,13 @@ function renderToday(){
       <div class="stat"><div class="v num">${dd.w}/8</div><div class="k">стаканов воды</div></div>
       <div class="stat"><div class="v">${[1,3,5].includes(viewDate.getDay())?'Зал':([2,4,6].includes(viewDate.getDay())?'Англ.':'Отдых')}</div><div class="k">${[1,3,5].includes(viewDate.getDay())?SPLIT[viewDate.getDay()]:([2,4,6].includes(viewDate.getDay())?'осанка + пресс':'от зала')}</div></div>
     </div>
-    <div class="next"><span class="eyebrow">Челлендж</span><span>${esc(challengeFor(viewDate))}</span></div>
     ${isToday?`<div class="next">${nextT?`<span class="eyebrow">Дальше</span><b class="num">${nextT.time}</b><span>${esc(nextT.t)}</span>`:`<span class="eyebrow">На сегодня</span><span>${sc.pct>=80?'План выполнен. Отбой вовремя — и день засчитан.':'Все пункты позади. Отметь, что успел.'}</span>`}</div>`:''}
   </div>
 
-  ${isToday && !S.remindHide && Object.keys(S.remind||{}).length<REMINDERS.length ? `
+  ${isToday && S.remindHide!==(S.remindUntil||'none') && Object.keys(S.remind||{}).length<REMINDERS.length ? `
   <div class="card" style="border-color:var(--accent);background:var(--accent-soft)">
-    <div class="section-head"><h3>Настрой напоминания</h3><span class="small muted num">добавлено ${Object.keys(S.remind||{}).length} из ${REMINDERS.length}</span></div>
-    <p class="small">Телефон будет сам напоминать про подъём, еду, зал и отбой. Один раз, 5 минут.</p>
+    <div class="section-head"><h3>${(S.remindRound||1)>1?'Продли напоминания':'Настрой напоминания'}</h3><span class="small muted num">добавлено ${Object.keys(S.remind||{}).length} из ${REMINDERS.length}</span></div>
+    <p class="small">${(S.remindRound||1)>1?'3 недели прошли — поставь напоминания на следующие 3 недели. Отбой уже по новому времени.':'Телефон будет сам напоминать про подъём, еду, зал, растяжку и отбой. Ставится на 3 недели, 5 минут.'}</p>
     <div class="btnrow"><button class="btn primary" data-act="go" data-v="remind">Настроить напоминания</button><button class="more" data-act="remhide">Скрыть</button></div>
   </div>` : ''}
   <div class="water">
@@ -555,7 +555,6 @@ function renderToday(){
           <span class="chip" style="--dot:${CATS[t.cat].c}"><i></i>${CATS[t.cat].n}</span>
           ${i===nextIdx?'<span class="nowtag">дальше</span>':''}
           ${t.link?`<button class="more" data-act="go" data-v="${t.link}">${linkLabel(t.link)}</button>`:''}
-          ${t.id==='challenge'&&!isFuture&&!dd.d.challenge?'<button class="more" data-act="chswap">Другой</button>':''}
         </div>
       </div>
       <button class="check" data-act="toggle" data-v="${t.id}" aria-pressed="${!!dd.d[t.id]}" aria-label="Отметить: ${esc(t.t)}" ${isFuture?'disabled':''}>${ICON.check}</button>
@@ -571,7 +570,7 @@ function renderToday(){
     </div>
   </div>`;
 }
-function linkLabel(l){ return ({speech:'Открыть тренажёр',hygiene:'Как бросить',food:'Меню',skin:'Как ухаживать',hair:'Укладка',gym:'Открыть тренировку',posture:'Упражнения',mind:'Зачем это',progress:'Открыть',style:'Капсула'})[l]||'Подробнее'; }
+function linkLabel(l){ return ({grow:'Упражнения',speech:'Открыть тренажёр',hygiene:'Как бросить',food:'Меню',skin:'Как ухаживать',hair:'Укладка',gym:'Открыть тренировку',posture:'Упражнения',mind:'Зачем это',progress:'Открыть',style:'Капсула'})[l]||'Подробнее'; }
 
 /* ================= ОТЧЁТЫ ================= */
 function lastMeasure(){ const m=[...S.measures].sort((a,b)=>a.date<b.date?-1:1); return {last:m[m.length-1],first:m[0],prev:m[m.length-2]}; }
@@ -579,7 +578,6 @@ function dayReport(date){
   const T=tasksFor(date), dd=dayData(keyOf(date)), sc=scoreFor(date);
   const g=T.find(t=>t.id==='gym'||t.id==='core'||t.id==='active'||t.id==='walk');
   const food=T.filter(t=>t.cat==='food'); const fd=food.filter(t=>dd.d[t.id]).length;
-  const ch=T.find(t=>t.id==='challenge');
   const {last}=lastMeasure();
   const L=[];
   L.push('Глоу ап'+(S.name?' — '+S.name:'')+' · '+DOW_FULL[date.getDay()]+', '+fmtDate(date));
@@ -589,7 +587,6 @@ function dayReport(date){
   L.push('🍽 Приёмов пищи: '+fd+'/'+food.length);
   L.push('💧 Вода: '+dd.w+'/8');
   L.push('😴 Отбой вовремя: '+(dd.d.sleep?'да':'нет'));
-  if(ch) L.push('💬 Челлендж ('+ch.d+'): '+(dd.d.challenge?'выполнен':'нет'));
   if(T.some(t=>t.id==='speech')) L.push('🗣 Дикция и речь: '+(dd.d.speech?'занимался':'нет'));
   if(last) L.push('⚖️ Последний замер: '+fmtNum(last.weight)+' кг'+(last.height?', '+fmtNum(last.height)+' см':''));
   return L.join('\n');
@@ -630,7 +627,7 @@ function copyText(text){
 }
 
 /* ================= ПЛАН ================= */
-const PLAN_TABS=[['grow','Рост'],['gym','Зал'],['skin','Кожа'],['hair','Волосы'],['style','Стиль'],['posture','Осанка и пресс'],['mind','Уверенность'],['hygiene','Ногти и зубы'],['no','Нельзя']];
+const PLAN_TABS=[['grow','Рост'],['gym','Зал'],['skin','Кожа'],['hair','Волосы'],['style','Стиль'],['posture','Осанка и пресс'],['mind','Общение'],['hygiene','Ногти и зубы'],['no','Нельзя']];
 const PLAN = {
 grow:()=>`
   <div class="prose">
@@ -658,6 +655,30 @@ grow:()=>`
         <li><b>Мерить раз в месяц</b> и записывать в «Прогресс». Если за год прибавил меньше 4 см, а сверстники растут — к педиатру.</li>
         <li><b>По желанию — эндокринолог.</b> По рентгену кисти он определит костный возраст: сколько лет ещё открыты зоны роста и какой примерно будет взрослый рост. Гормон роста назначают только при реальной болезни, здоровому подростку его не дают.</li>
       </ol>
+    </div>
+    <div class="card">
+      <h3>Комплекс «Рост и спина» · каждый вечер, 7 минут</h3>
+      <p class="small muted">Честно: кости упражнения не удлиняют — это делают сон и еда. Комплекс снимает сжатие позвоночника после дня за партой и в зале, выпрямляет осанку (+1–3 см на ростомере) и учит тело держаться ровно. Делать каждый вечер, тихо, без прыжков.</p>
+      <div class="ex"><div class="n">1</div><div><div class="nm">Вис на турнике</div><span class="sets">3 × 20–30 с</span><div class="cue">Дома на турнике в дверном проёме или после зала. Тело расслаблено, плечи не тянуть к ушам. Нет турника — пропусти.</div></div></div>
+      <div class="ex"><div class="n">2</div><div><div class="nm">Струна лёжа</div><span class="sets">3 × 10 с</span><div class="cue">Лёжа на спине, вытяни руки за голову. Тянись руками вверх, а носками вниз, как будто тебя растягивают в две стороны.</div></div></div>
+      <div class="ex"><div class="n">3</div><div><div class="nm">Кобра</div><span class="sets">3 × 15–20 с</span><div class="cue">Лёжа на животе, ладони под плечами. Плавно выпрямляй руки, таз на полу, смотри вперёд. Без боли в пояснице.</div></div></div>
+      <div class="ex"><div class="n">4</div><div><div class="nm">Поза ребёнка</div><span class="sets">30 с</span><div class="cue">Сядь на пятки, наклонись вперёд, руки вытяни далеко перед собой, лоб на пол.</div></div></div>
+      <div class="ex"><div class="n">5</div><div><div class="nm">Кошка — корова</div><span class="sets">10 раз</span><div class="cue">На четвереньках плавно округляй спину вверх, потом прогибай вниз.</div></div></div>
+      <div class="ex"><div class="n">6</div><div><div class="nm">Наклон к ногам сидя</div><span class="sets">2 × 30 с</span><div class="cue">Сидя, ноги прямые. Тянись грудью к коленям, спина ровная. Растягивает заднюю поверхность бедра — без этого таз тянет осанку вниз.</div></div></div>
+      <div class="ex"><div class="n">7</div><div><div class="nm">Струна у стены</div><span class="sets">30 с</span><div class="cue">Пятки, ягодицы, лопатки и затылок — к стене. Тянись макушкой вверх. Запоминаешь, как стоять ровно.</div></div></div>
+      <p class="small muted">Днём, 2–3 раза в неделю, полезны прыжки: скакалка 3 минуты в разминке перед залом, баскетбол или волейбол в субботу. Прыжковая нагрузка в подростковом возрасте делает кости плотнее и крепче.</p>
+    </div>
+    <div class="card">
+      <h3>Продукты для роста</h3>
+      <p class="small muted">Кости растут из того, что он ест. Если чего-то не хватает, рост тормозит. Всё это уже есть в меню — главное не пропускать.</p>
+      <dl class="kv">
+        <dt>Каждый день</dt><dd>3 порции молочного (кальций), 2 яйца (белок, витамин D), мясо или рыба 2 раза (белок, цинк, железо), овощи и фрукты (витамин C), горсть орехов или семечек (цинк, магний).</dd>
+        <dt>2–3 раза в неделю</dt><dd>Жирная рыба: скумбрия, горбуша, сельдь — витамин D и омега-3.</dd>
+        <dt>1 раз в неделю</dt><dd>Печень — говяжья или куриная, вместо мяса в любой ужин. Много железа, цинка и витамина A.</dd>
+        <dt>Часто</dt><dd>Гречка, фасоль, чечевица — железо и магний.</dd>
+        <dt>Перед сном</dt><dd>Стакан кефира или молока, или творог — белок и кальций на ночь, когда идёт рост.</dd>
+      </dl>
+      <div class="note">Из добавок имеет смысл только витамин D — и только после анализа «25(OH)D» и по назначению педиатра. Кальций в таблетках не нужен, если есть 3 порции молочного. «БАДы для роста» и гормоны — нет.</div>
     </div>
     <div class="card">
       <h3>Выглядеть выше уже сейчас · до +5 см визуально</h3>
@@ -732,7 +753,7 @@ gym:()=>{
     <div class="card">
       <h3>16:30–17:00 · пока ждёшь тренера</h3>
       <ol class="clean">
-        <li>5–7 минут лёгкого кардио: велотренажёр или быстрая ходьба. Дольше не надо — калории нужны на массу.</li>
+        <li>5–7 минут лёгкого кардио: велотренажёр или быстрая ходьба. Лучше всего — 3 минуты скакалки: прыжки укрепляют кости. Дольше не надо — калории нужны на массу.</li>
         <li>Суставная разминка: плечи, локти, таз, колени — по 10 вращений.</li>
         <li>Вис на турнике 2 × 20 секунд.</li>
         <li>2 лёгких подхода первого упражнения дня с половиной рабочего веса.</li>
@@ -984,7 +1005,7 @@ posture:()=>`
 mind:()=>`
   <div class="prose">
     <h2>Уверенность</h2>
-    <p class="lead">Уверенность — навык. Она тренируется так же, как присед: маленькими повторениями каждый день. Поэтому в распорядке есть «челлендж дня» — 30 штук по кругу, а для дикции и разговора — отдельная вкладка «Дикция».</p>
+    <p class="lead">Уверенность — навык. Она растёт от маленьких побед каждый день: выполнил план дня, сделал тренировку, говорил чётко. Для речи и разговора — отдельная вкладка «Дикция».</p>
     <div class="card">
       <h3>Базовые привычки</h3>
       <dl class="kv">
@@ -1016,10 +1037,7 @@ mind:()=>`
         <li>Если симпатия не взаимна — это нормально и не делает тебя хуже.</li>
       </ul>
     </div>
-    <div class="card soft">
-      <h3>Все 30 челленджей</h3>
-      <ol class="clean small">${CHALLENGES.map(c=>'<li>'+esc(c)+'</li>').join('')}</ol>
-    </div>
+
   </div>`,
 hygiene:()=>`
   <div class="prose">
@@ -1184,6 +1202,7 @@ function renderFood(){
     </ul>
   </div>
 
+  <div class="note ok">Продукты, которые особенно важны для роста, и печень раз в неделю — в разделе «План» → «Рост».</div>
   <div class="note">Витамин D: с октября по апрель солнца мало. Сдай анализ «25(OH)D» и спроси педиатра про дозировку — сами витамины не назначаем.</div>
 
   <div class="section-head"><h2>Покупки на неделю</h2><button class="more" data-act="shopreset">Сбросить отметки</button></div>
@@ -1317,13 +1336,45 @@ function nextDateFor(r){
   for(let i=1;i<=7;i++){ const d=addDays(t,i); if(r.days==='DAILY' || r.days.some(c=>DAYCODE[c]===d.getDay())) return d; }
   return addDays(t,1);
 }
+const REM_DAYS = 21;
+function remWindowEnd(){ return S.remindUntil ? parseKey(S.remindUntil) : addDays(parseKey(todayKey()), REM_DAYS); }
 function gcalLink(r){
   const d=nextDateFor(r); const [h,m]=r.time.split(':').map(Number);
   const s=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h,m); const e=new Date(s.getTime()+r.dur*60000);
   const f=x=>x.getFullYear()+String(x.getMonth()+1).padStart(2,'0')+String(x.getDate()).padStart(2,'0')+'T'+String(x.getHours()).padStart(2,'0')+String(x.getMinutes()).padStart(2,'0')+'00';
-  const rr = r.days==='DAILY' ? 'RRULE:FREQ=DAILY' : 'RRULE:FREQ=WEEKLY;'+(r.interval?'INTERVAL='+r.interval+';':'')+'BYDAY='+r.days.join(',');
+  const u=remWindowEnd(); const until=u.getFullYear()+String(u.getMonth()+1).padStart(2,'0')+String(u.getDate()).padStart(2,'0')+'T235959';
+  const rr = r.days==='DAILY' ? 'RRULE:FREQ=DAILY;UNTIL='+until : 'RRULE:FREQ=WEEKLY;'+(r.interval?'INTERVAL='+r.interval+';':'')+'BYDAY='+r.days.join(',')+';UNTIL='+until;
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Глоу ап: '+r.t)+'&details='+encodeURIComponent(r.d)+'&dates='+f(s)+'/'+f(e)+'&recur='+encodeURIComponent(rr);
 }
+function icsEsc(x){ return String(x).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); }
+function icsFold(line){
+  const enc=new TextEncoder(); let out='', cur='', n=0;
+  for(const ch of line){ const b=enc.encode(ch).length; if(n+b>73){ out+=cur+'\r\n '; cur=''; n=1; } cur+=ch; n+=b; }
+  return out+cur;
+}
+function icsBuild(){
+  const f=x=>x.getFullYear()+String(x.getMonth()+1).padStart(2,'0')+String(x.getDate()).padStart(2,'0')+'T'+String(x.getHours()).padStart(2,'0')+String(x.getMinutes()).padStart(2,'0')+'00';
+  const now=new Date(); const stamp=now.toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Glowup//RU','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Глоу Ап'];
+  const start=addDays(parseKey(todayKey()),1); let n=0;
+  for(let i=0;i<REM_DAYS;i++){
+    const date=addDays(start,i), dow=date.getDay(), code=Object.keys(DAYCODE).find(k=>DAYCODE[k]===dow);
+    for(const r of REMINDERS){
+      if(r.days!=='DAILY' && !r.days.includes(code)) continue;
+      if(r.interval && (((weekNo(date)%r.interval)+r.interval)%r.interval)!==0) continue;
+      const tm = r.bed!=null ? fmtMin(bedtimeFor(date)+r.bed) : r.time;
+      const [h,m]=tm.split(':').map(Number); const s0=new Date(date.getFullYear(),date.getMonth(),date.getDate(),h,m); const e0=new Date(s0.getTime()+60*60000);
+      L.push('BEGIN:VEVENT','UID:'+r.id+'-'+keyOf(date)+'@glowup','DTSTAMP:'+stamp,'DTSTART:'+f(s0),'DTEND:'+f(e0),
+        icsFold('SUMMARY:'+icsEsc('Глоу ап: '+r.t)),icsFold('DESCRIPTION:'+icsEsc(r.d)),
+        'BEGIN:VALARM','ACTION:DISPLAY',icsFold('DESCRIPTION:'+icsEsc(r.t)),'TRIGGER:PT0M','END:VALARM','END:VEVENT'); n++;
+    }
+  }
+  L.push('END:VCALENDAR');
+  return {text:L.join('\r\n')+'\r\n', n};
+}
+function remStart(){ if(!S.remindUntil){ S.remindUntil=keyOf(addDays(parseKey(todayKey()),REM_DAYS)); } }
+function remCheckExpired(){ if(S.remindUntil && todayKey()>S.remindUntil){ S.remind={}; S.remindUntil=null; S.remindHide=null; S.remindRound=(S.remindRound||1)+1; save(); } }
+const IN_FRAME = (()=>{ try{ return window.self!==window.top; }catch(e){ return true; } })();
 function daysLabel(r){
   if(r.days==='DAILY') return 'каждый день';
   const s=r.days.join(',');
@@ -1334,13 +1385,22 @@ function renderRemind(){
   const el=$('#tab-remind'); const added=REMINDERS.filter(r=>S.remind[r.id]).length;
   el.innerHTML = `
   <div class="top"><div><div class="eyebrow">Redmi · Google Календарь</div><h1>Напоминания</h1></div><button class="btn sm" data-act="back">← Назад</button></div>
-  <p>Приложение не может само присылать уведомления, когда закрыто. Поэтому ставим напоминания в Google Календарь один раз — дальше они повторяются сами.</p>
+  <p>Приложение не может само присылать уведомления, когда закрыто, поэтому ставим их в Google Календарь. Каждое напоминание ставится <b>ровно на 3 недели вперёд</b>${S.remindUntil?` — до ${fmtDate(parseKey(S.remindUntil))}`:''}. Через 3 недели приложение само предложит продлить, а время отбоя подстроится под новую неделю.</p>
+  <div class="card" style="border-color:var(--accent)">
+    <h3>Быстро: все напоминания одним файлом</h3>
+    <p class="small">Один файл — все ${REMINDERS.length} напоминаний на 3 недели, отбой уже по графику перехода ко сну.</p>
+    ${IN_FRAME?'<p class="small muted">Скачивание работает в установленном приложении (ссылка с GitHub). Здесь — добавляй по одному ниже.</p>':'<div class="btnrow"><button class="btn primary" data-act="icsdl">Скачать файл на 3 недели</button></div>'}
+    <ol class="clean small">
+      <li>Открой скачанный файл <b>glowup-3-nedeli.ics</b> → «Открыть с помощью» → <b>Google Календарь</b> → «Импорт» / «Добавить».</li>
+      <li>Если телефон не предлагает Календарь — на компьютере: calendar.google.com → ⚙ Настройки → «Импорт и экспорт» → выбери файл → «Импортировать». Через минуту всё появится на телефоне.</li>
+    </ol>
+  </div>
   <div class="card">
     <h3>Настройка на Redmi · 5 минут</h3>
     <ol class="clean">
       <li>В Google Календаре: меню ☰ → Настройки → твой аккаунт → уведомления по умолчанию для мероприятий → «За 0 минут» (или «За 5 минут»). Сделай это до добавления.</li>
       <li>Нажимай «Добавить в календарь» у каждого пункта ниже → откроется Google Календарь с готовым событием → «Сохранить».</li>
-      <li>Проверь строку «Повторять»: если календарь не поставил повтор сам — выбери «Каждую неделю» и отметь дни, которые написаны под названием напоминания.</li>
+      <li>Проверь строку «Повторять»: там должно быть «до» и дата через 3 недели. Если повтор не встал сам — выбери «Каждую неделю», отметь дни под названием напоминания и окончание через 3 недели.</li>
       <li>Чтобы MIUI не глушил уведомления: Настройки → Приложения → Календарь → Контроль активности (Экономия заряда) → «Нет ограничений». Там же проверь, что уведомления включены.</li>
       <li>Подъём и отбой надёжнее поставить будильником в приложении «Часы».</li>
       <li>Чтобы приложение было под рукой: в Chrome ⋮ → «Добавить на главный экран».</li>
@@ -1593,7 +1653,7 @@ document.addEventListener('click',e=>{
     let n=cur, guard=0; while((n===cur || (we && SCHOOL_CH.includes(n)) || (S.chSkip||[]).includes(n)) && guard<100){ n=Math.floor(Math.random()*CHALLENGES.length); guard++; }
     dd.ch=n; save(); const y=window.scrollY; renderToday(); window.scrollTo(0,y); toast('Новый челлендж на сегодня');
   }
-  else if(act==='remhide'){ S.remindHide=true; save(); renderToday(); toast('Напоминания — колокольчик вверху'); }
+  else if(act==='remhide'){ S.remindHide=(S.remindUntil||'none'); save(); renderToday(); toast('Напоминания — колокольчик вверху'); }
   else if(act==='water'){ const k=keyOf(viewDate); const dd=ensureDay(k); const n=+v; dd.w = (dd.w===n)? n-1 : n; save(); const y=window.scrollY; renderToday(); window.scrollTo(0,y); }
   else if(act==='back'){ viewDate=parseKey(todayKey()); show('today'); window.scrollTo(0,0); }
   else if(act==='day'){ const n=+v; viewDate = n===0? parseKey(todayKey()) : addDays(viewDate,n); renderToday(); }
@@ -1606,7 +1666,13 @@ document.addEventListener('click',e=>{
   else if(act==='shopreset'){ S.shop={}; save(); const y=window.scrollY; renderFood(); window.scrollTo(0,y); toast('Отметки сброшены'); }
   else if(act==='wa'){ const txt = v==='week'? weekReport() : dayReport(viewDate); a.href = waHref(txt); }
   else if(act==='copy'){ copyText(v==='week'? weekReport() : dayReport(viewDate)); }
-  else if(act==='gcal'){ S.remind[v]=true; save(); setTimeout(renderRemind,300); }
+  else if(act==='gcal'){ remStart(); S.remind[v]=true; save(); setTimeout(renderRemind,300); }
+  else if(act==='icsdl'){
+    try{ remStart(); const {text,n}=icsBuild(); const blob=new Blob([text],{type:'text/calendar;charset=utf-8'}); const url=URL.createObjectURL(blob);
+      const a2=document.createElement('a'); a2.href=url; a2.download='glowup-3-nedeli.ics'; document.body.appendChild(a2); a2.click(); a2.remove(); setTimeout(()=>URL.revokeObjectURL(url),5000);
+      REMINDERS.forEach(r=>S.remind[r.id]=true); save(); toast('Файл скачан: '+n+' напоминаний'); renderRemind();
+    }catch(err){ toast('Не получилось скачать файл'); }
+  }
   else if(act==='unrem'){ delete S.remind[v]; save(); renderRemind(); }
   else if(act==='mdel'){ if(delArm===v){ S.measures=S.measures.filter(m=>m.id!==v); delArm=null; save(); toast('Замер удалён'); } else delArm=v; renderProgress(); }
   else if(act==='backup'){ try{ copyText(btoa(unescape(encodeURIComponent(JSON.stringify(S))))); }catch(err){ toast('Не получилось создать код'); } }
